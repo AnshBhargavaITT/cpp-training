@@ -1,82 +1,77 @@
 #include<iostream>
-using namespace std;
+
+void printPattern(int,int);
+
 int main()
 {
     int n;
-    cout<<"Enter the value of n"<<endl;
-    cin>>n;
-    for(int iteratorI=0;iteratorI<n-1;iteratorI++)
+    std::cout << "Enter the value of n" << std::endl;
+    std::cin >> n;
+
+    if(n <= 0)
     {
-        for(int iteratorJ=0;iteratorJ<=iteratorI;iteratorJ++)
-        {
-            if((iteratorJ%2)==0)
-            {
-                cout<<"1";
-            }
-            else 
-            {
-                cout<<"0";
-            }
-        }
-        int emptySpace=2*(n-iteratorI-1)-1;
-        for(int iteratorJ=0;iteratorJ<emptySpace;iteratorJ++)
-        {
-            cout<<" ";
-        }
-        for(int iteratorJ=0;iteratorJ<=iteratorI;iteratorJ++)
-        {
-            if((iteratorJ%2)==0)
-            {
-                cout<<"1";
-            }
-            else 
-            {
-                cout<<"0";
-            }
-        }
-        cout<<endl;
+        std::cout << "Invalid input : Enter a positive integer." << std::endl;
+        return 1;
     }
-    for(int iteratorI=0;iteratorI<(2*n-1);iteratorI++)
+
+    for(int iteratorI = 0; iteratorI < n-1; iteratorI++)
     {
-        if((iteratorI%2)==0)
+        printPattern(iteratorI, n);
+        std::cout << std::endl;
+    }
+
+    for(int iteratorI = 0; iteratorI < 2*n-1; iteratorI++)
+    {
+        if((iteratorI % 2) == 0)
         {
-            cout<<"1";
+            std::cout << "1";
         }
-        else 
+        else
         {
-            cout<<"0";
+            std::cout << "0";
         }
     }
-    cout<<endl;
-    for(int iteratorI=n-2;iteratorI>=0;iteratorI--)
+    std::cout << std::endl;
+
+    for(int iteratorI = n-2; iteratorI >= 0; iteratorI--)
     {
-        for(int iteratorJ=0;iteratorJ<=iteratorI;iteratorJ++)
+        printPattern(iteratorI, n);
+        std::cout << std::endl;
+    }
+
+    return 0;
+}
+
+void printPattern(int iteratorI, int n)
+{
+    for(int iteratorJ = 0; iteratorJ <= iteratorI; iteratorJ++)
+    {
+        if((iteratorJ % 2) == 0)
         {
-            if((iteratorJ%2)==0)
-            {
-                cout<<"1";
-            }
-            else 
-            {
-                cout<<"0";
-            }
+            std::cout << "1";
         }
-        int emptySpace=2*(n-iteratorI-1)-1;
-        for(int iteratorJ=0;iteratorJ<emptySpace;iteratorJ++)
+        else
         {
-            cout<<" ";
+            std::cout << "0";
         }
-        for(int iteratorJ=0;iteratorJ<=iteratorI;iteratorJ++)
+    }
+
+    int emptySpace = 2*(n-iteratorI- 1)- 1;
+
+    for(int iteratorJ = 0; iteratorJ < emptySpace; iteratorJ++)
+    {
+        std::cout << " ";
+    }
+
+    for(int iteratorJ = 0; iteratorJ <= iteratorI; iteratorJ++)
+    {
+        if((iteratorJ % 2) == 0)
         {
-            if((iteratorJ%2)==0)
-            {
-                cout<<"1";
-            }
-            else 
-            {
-                cout<<"0";
-            }
+            std::cout << "1";
         }
-        cout<<endl;
+        else
+        {
+            std::cout << "0";
+        }
     }
 }
