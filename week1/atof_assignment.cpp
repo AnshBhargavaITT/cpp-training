@@ -1,6 +1,11 @@
 #include <iostream>
 #include <string>
+#include <cmath>
 
+int extraWhiteSpace(const std::string& inputString, int index);
+void integerPart(const std::string& inputString, int& index, double& number, bool& isDigit);
+void fractionPart(const std::string& inputString, int& index, double& number, bool& isDigit);
+void exponentPart(const std::string& inputString, int& index, double& number);
 double parseStringToDouble(const std::string& inputString, bool& isValid);
 
 int main()
@@ -14,7 +19,7 @@ int main()
 
     if (!isValidNumber)
     {
-        std::cout << "0" << std::endl;
+        std::cout << "0.0" << std::endl;
         return 1;
     }
 
@@ -22,36 +27,30 @@ int main()
     return 0;
 }
 
-double parseStringToDouble(const std::string& inputString, bool& isValid)
+int extraWhiteSpace(const std::string& inputString, int index)
 {
     int length = inputString.length();
-    int index = 0;
-    bool isPositive = true;
-    double number = 0.0;
-    bool isDigit = false;
-
     while (index < length && inputString[index] == ' ')
     {
         index++;
     }
+    return index;
+}
 
-    if (index < length && inputString[index] == '-')
-    {
-        isPositive = false;
-        index++;
-    }
-    else if(index<length && inputString[index]=='+')
-    {
-        index++;
-    }
-
+void integerPart(const std::string& inputString, int& index, double& number, bool& isDigit)
+{
+    int length = inputString.length();
     while (index < length && inputString[index] >= '0' && inputString[index] <= '9')
     {
         isDigit = true;
         number = (number * 10) + (inputString[index] - '0');
         index++;
     }
+}
 
+void fractionPart(const std::string& inputString, int& index, double& number, bool& isDigit)
+{
+    int length = inputString.length();
     if (index < length && inputString[index] == '.')
     {
         index++;
@@ -66,6 +65,65 @@ double parseStringToDouble(const std::string& inputString, bool& isValid)
         }
         number += fraction;
     }
+}
+
+void exponentPart(const std::string& inputString, int& index, double& number)
+{
+    int length = inputString.length();
+    if (index < length && (inputString[index] == 'e' || inputString[index] == 'E'))
+    {
+        index++;
+        bool expPositive = true;
+        if (index < length && (inputString[index] == '+' || inputString[index] == '-'))
+        {
+            if (inputString[index] == '-')
+            {
+                expPositive = false;
+            }
+            index++;
+        }
+
+        int exponent = 0;
+
+        while (index < length && inputString[index] >= '0' && inputString[index] <= '9')
+        {
+            exponent = (exponent * 10) + (inputString[index] - '0');
+            index++;
+        }
+
+        if (!expPositive)
+        {
+            exponent = -exponent;
+        }
+
+        number *= pow(10.0, exponent);
+    }
+
+}
+
+double parseStringToDouble(const std::string& inputString, bool& isValid)
+{
+    int length = inputString.length();
+    int index = 0;
+    bool isPositive = true;
+    double number = 0.0;
+    bool isDigit = false;
+
+    index = extraWhiteSpace(inputString, index);
+
+    if (index < length && inputString[index] == '-')
+    {
+        isPositive = false;
+        index++;
+    }
+    else if (index < length && inputString[index] == '+')
+    {
+        index++;
+    }
+
+    integerPart(inputString, index, number, isDigit);
+    fractionPart(inputString, index, number, isDigit);
+    exponentPart(inputString, index, number);
 
     if (!isDigit)
     {
@@ -80,5 +138,4 @@ double parseStringToDouble(const std::string& inputString, bool& isValid)
 
     isValid = true;
     return number;
-}        
-
+}
