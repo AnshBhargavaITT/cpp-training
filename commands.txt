@@ -1,0 +1,41 @@
+Implicit Linking : 
+g++ -fPIC -Iinc -c src/add.cpp -o add.o
+g++ -fPIC -Iinc -c src/subtract.cpp -o subtract.o
+g++ -fPIC -Iinc -c src/multiply.cpp -o multiply.o
+g++ -fPIC -Iinc -c src/division.cpp -o division.o
+g++ -shared -o libmath.so add.o subtract.o multiply.o division.o
+g++ -Iinc -c src/implicit_main.cpp -o implicit_main.o
+g++ implicit_main.o -L. -lmath -Wl,-rpath=. -o app_implicit
+./app_implicit
+
+Explicit Linking :
+g++ -fPIC -Iinc -c src/add.cpp -o add.o
+g++ -fPIC -Iinc -c src/subtract.cpp -o subtract.o
+g++ -fPIC -Iinc -c src/multiply.cpp -o multiply.o
+g++ -fPIC -Iinc -c src/division.cpp -o division.o
+g++ -shared -o libmath.so add.o subtract.o multiply.o division.o
+g++ -Iinc -c src/explicit_main.cpp -o explicit_main.o
+g++ explicit_main.o -ldl -o app_explicit
+./app_explicit
+
+
+Commands Explaination : 
+-> g++ -fPIC -Iinc -c src/add.cpp -o add.o
+-> g++ -fPIC -Iinc -c src/subtract.cpp -o subtract.o
+-> g++ -fPIC -Iinc -c src/multiply.cpp -o multiply.o
+-> g++ -fPIC -Iinc -c src/division.cpp -o division.o
+
+Above 4 commands are used to compile .cpp files into .o files, where -fPIC ensures that .o files can be used in a shared library, and -I indicates that header files are in the inc folder.
+
+-> g++ -shared -o libmath.so add.o subtract.o multiply.o division.o
+This command is used to link all object file into one shared library named libmath.so
+
+-> g++ -Iinc -c src/implicit_main.cpp -o implicit_main.o
+-> g++ -Iinc -c src/explicit_main.cpp -o explicit_main.o
+In these commands , basically we are compiling our main file which is calling function from libmath.so library into .o file 
+
+g++ implicit_main.o -L. -lmath -Wl,-rpath=. -o app_implicit
+This command is used to link the main.o file with shared library named libmath.so where -L. look for library in current directory and -rpath basically looks in the current directory for libmath.so 
+
+-> g++ explicit_main.o -ldl -o app_explicit
+This command is use to link main file with libdl so to use function like dlopen , dlsym , dlclose , dlerror 
