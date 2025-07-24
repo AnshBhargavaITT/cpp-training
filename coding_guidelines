@@ -1,0 +1,10 @@
+-> For Classes , Structs and enum , use PascalCase 
+-> For functions and variables , use camelCase.
+-> Always put { and } on new lines.
+-> Use spaces around binary operators, after commas in function arguments, and between control flow statements and parentheses.
+-> For constants , use UpperCase . 
+-> Use // for single-line comments.
+-> Use /* */ only for blocks or disabling code.
+-> Use braces even for single-line bodies.
+-> Always initialize variables to prevent undefined behavior.
+-> Minimize the use of global variables . 
