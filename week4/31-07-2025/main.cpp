@@ -26,14 +26,14 @@ int main()
         {
         case 1:
         {
-            Matrix result = Matrix::addMatrix(matrixOne, matrixTwo);
+            Matrix result = matrixOne.addMatrix(matrixTwo);
             std::cout << "Matrix Addition Result: "<<std::endl;
             result.printMatrix();
             break;
         }
         case 2:
         {
-            Matrix result = Matrix::multiplyMatrix(matrixOne,matrixTwo);
+            Matrix result = matrixOne.multiplyMatrix(matrixTwo);
             std::cout << "Matrix Multiplication Result: "<<std::endl;
             result.printMatrix();
             break;

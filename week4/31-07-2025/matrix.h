@@ -22,8 +22,8 @@ public:
     }
     void inputMatrix();
     void printMatrix();
-    static Matrix addMatrix(const Matrix& a, const Matrix& b);
-    static Matrix multiplyMatrix(const Matrix& a, const Matrix& b);
+    Matrix addMatrix(const Matrix& a);
+    Matrix multiplyMatrix(const Matrix& a);
 };
 
 #endif

@@ -48,31 +48,31 @@ void Matrix::printMatrix()
     }
 }
 
-Matrix Matrix::addMatrix(const Matrix& matrixOne, const Matrix& matrixTwo) 
+Matrix Matrix::addMatrix(const Matrix& matrixTwo) 
 {
-    Matrix result(matrixOne.rows, matrixOne.columns);
-    for (int rowIteratorI = 0; rowIteratorI < matrixOne.rows;rowIteratorI++ )
+    Matrix result(this->rows, this->columns);
+    for (int rowIteratorI = 0; rowIteratorI < this->rows;rowIteratorI++ )
     {
-        for (int columnIteratorJ= 0; columnIteratorJ < matrixOne.columns; columnIteratorJ++)
+        for (int columnIteratorJ= 0; columnIteratorJ < this->columns; columnIteratorJ++)
         {
-            *(*(result.matrix + rowIteratorI) + columnIteratorJ) = *(*(matrixOne.matrix + rowIteratorI) + columnIteratorJ) + *(*(matrixTwo.matrix + rowIteratorI) + columnIteratorJ);
+            *(*(result.matrix + rowIteratorI) + columnIteratorJ) = *(*(this->matrix + rowIteratorI) + columnIteratorJ) + *(*(matrixTwo.matrix + rowIteratorI) + columnIteratorJ);
         }
     }
         
     return result;
 }
 
-Matrix Matrix::multiplyMatrix(const Matrix& matrixOne, const Matrix& matrixTwo)
+Matrix Matrix::multiplyMatrix(const Matrix& matrixTwo)
 {
-    Matrix result(matrixOne.rows, matrixTwo.columns);
-    for(int rowIteratorI=0;rowIteratorI<matrixOne.rows;rowIteratorI++)
+    Matrix result(this->rows, matrixTwo.columns);
+    for(int rowIteratorI=0;rowIteratorI<this->rows;rowIteratorI++)
     {
         for(int columnIteratorJ=0;columnIteratorJ<matrixTwo.columns;columnIteratorJ++)
         {
             *(*(result.matrix + rowIteratorI) + columnIteratorJ)=0;
-            for(int iteratorK=0;iteratorK<matrixOne.columns;iteratorK++)
+            for(int iteratorK=0;iteratorK<this->columns;iteratorK++)
             {
-                *(*(result.matrix + rowIteratorI) + columnIteratorJ)+= (*(*(matrixOne.matrix + rowIteratorI) + iteratorK) ) * (*(*(matrixTwo.matrix + iteratorK) + columnIteratorJ));
+                *(*(result.matrix + rowIteratorI) + columnIteratorJ)+= (*(*(this->matrix + rowIteratorI) + iteratorK) ) * (*(*(matrixTwo.matrix + iteratorK) + columnIteratorJ));
             }
         }
     }
