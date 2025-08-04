@@ -1,5 +1,5 @@
 #include<iostream>
-#include "matrixOperation.h"
+#include "matrix.h"
 
 void Matrix::createMatrix() 
 {
@@ -33,18 +33,6 @@ void Matrix::inputMatrix()
                 std::cout << "Invalid Input" << std::endl;
             }
         }
-    }
-}
-
-void Matrix::printMatrix()
-{
-    for (int rowIteratorI = 0; rowIteratorI < rows; rowIteratorI++)
-    {
-        for (int columnIteratorJ = 0; columnIteratorJ < columns; columnIteratorJ++)
-        {
-            std::cout << *(*(matrix + rowIteratorI) + columnIteratorJ) << " ";
-        }
-        std::cout << std::endl;
     }
 }
 

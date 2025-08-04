@@ -1,9 +1,9 @@
 #include <iostream>
-#include "matrixOperation.h"
+#include "matrix.h"
 
 int getInputOperation(int row1, int column1, int row2, int column2);
 void getMatrixDimension(int &row,int &column);
-
+void printMatrix(Matrix& result);
 int main() 
 {
     while (true) 
@@ -28,14 +28,14 @@ int main()
         {
             Matrix result = Matrix::addMatrix(matrixOne, matrixTwo);
             std::cout << "Matrix Addition Result: "<<std::endl;
-            result.printMatrix();
+            printMatrix(result);
             break;
         }
         case 2:
         {
             Matrix result = Matrix::multiplyMatrix(matrixOne,matrixTwo);
             std::cout << "Matrix Multiplication Result: "<<std::endl;
-            result.printMatrix();
+            printMatrix(result);
             break;
         }
         case 3:
@@ -94,4 +94,16 @@ int getInputOperation(int row1, int column1, int row2, int column2)
     }
 
     return operation;
+}
+
+void printMatrix(Matrix& result)
+{
+    for (int rowIteratorI = 0; rowIteratorI < result.getRows(); rowIteratorI++)
+    {
+        for (int columnIteratorJ = 0; columnIteratorJ < result.getColumns(); columnIteratorJ++)
+        {
+            std::cout << result.getElement(rowIteratorI, columnIteratorJ) << " ";
+        }
+        std::cout << std::endl;
+    }
 }

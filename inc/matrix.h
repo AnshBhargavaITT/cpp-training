@@ -21,7 +21,18 @@ public:
         freeMatrix();
     }
     void inputMatrix();
-    void printMatrix();
+    int getRows()  
+    { 
+        return rows; 
+    }
+    int getColumns() 
+    { 
+        return columns; 
+    }
+    int getElement(int rowIteratorI, int colIteratorJ) 
+    {
+        return *(*(matrix+rowIteratorI)+colIteratorJ); 
+    }
     static Matrix addMatrix(const Matrix& a, const Matrix& b);
     static Matrix multiplyMatrix(const Matrix& a, const Matrix& b);
 };
