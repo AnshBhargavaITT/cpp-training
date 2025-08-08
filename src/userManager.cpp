@@ -1,23 +1,23 @@
 #include "userManager.h"
-#include<iostream>
+#include <iostream>
 
-void UserManager::addUser(User* user) 
+void UserManager::addUser(User *user)
 {
-    if (getUserByUsername(user->getUsername()) == nullptr) 
+    if (getUserByUsername(user->getUsername()) == nullptr)
     {
         users.push_back(user);
-    } 
-    else 
+    }
+    else
     {
-        std::cout << "User with username already exists "<<std::endl;
+        std::cout << "User with username already exists " << std::endl;
     }
 }
 
-bool UserManager::removeUser(int userId) 
+bool UserManager::removeUser(int userId)
 {
-    for (int iteratorI = 0; iteratorI < users.size(); iteratorI++) 
+    for (int iteratorI = 0; iteratorI < users.size(); iteratorI++)
     {
-        if (users[iteratorI]->getUserId() == userId) 
+        if (users[iteratorI]->getUserId() == userId)
         {
             users.erase(users.begin() + iteratorI);
             return true;
@@ -26,11 +26,11 @@ bool UserManager::removeUser(int userId)
     return false;
 }
 
-User* UserManager::getUserById(int userId) const 
+User *UserManager::getUserById(int userId) const
 {
-    for (int iteratorI = 0; iteratorI < users.size(); iteratorI++) 
+    for (int iteratorI = 0; iteratorI < users.size(); iteratorI++)
     {
-        if (users[iteratorI]->getUserId() == userId) 
+        if (users[iteratorI]->getUserId() == userId)
         {
             return users[iteratorI];
         }
@@ -38,11 +38,11 @@ User* UserManager::getUserById(int userId) const
     return nullptr;
 }
 
-User* UserManager::getUserByUsername(const std::string& username) const 
+User *UserManager::getUserByUsername(const std::string &username) const
 {
-    for (int iteratorI = 0; iteratorI < users.size(); iteratorI++) 
+    for (int iteratorI = 0; iteratorI < users.size(); iteratorI++)
     {
-        if (users[iteratorI]->getUsername() == username) 
+        if (users[iteratorI]->getUsername() == username)
         {
             return users[iteratorI];
         }
@@ -50,4 +50,4 @@ User* UserManager::getUserByUsername(const std::string& username) const
     return nullptr;
 }
 
-const std::vector<User*>& UserManager::getAllUsers() const {return users;}
+const std::vector<User *> &UserManager::getAllUsers() const { return users; }

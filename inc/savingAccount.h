@@ -3,7 +3,7 @@
 
 #include "account.h"
 
-class SavingsAccount : public Account 
+class SavingsAccount : public Account
 {
 public:
     bool withdraw(double amount) override;

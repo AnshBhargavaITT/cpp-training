@@ -19,7 +19,7 @@ void depositMoney(AccountHolder *holder);
 void withdrawMoney(AccountHolder *holder);
 void showBalance(AccountHolder *holder);
 void viewMiniStatements(AccountHolder *holder);
-void personalBankAccount(Admin* admin, Authentication& auth, Bank& bank);
+void personalBankAccount(Admin *admin, Authentication &auth, Bank &bank);
 
 int main()
 {
@@ -41,10 +41,12 @@ int main()
         case 1:
             loginUser(auth, bank, userManager);
             break;
+
         case 2:
             session = false;
             std::cout << "Exit" << std::endl;
             break;
+
         default:
             std::cout << "Invalid Input" << std::endl;
         }
@@ -66,9 +68,11 @@ void registerUser(Bank &bank, UserManager &userManager)
     case 1:
         registerAccountHolder(bank, userManager);
         break;
+
     case 2:
         registerAdmin(bank, userManager);
         break;
+
     default:
         std::cout << "Invalid choice" << std::endl;
     }
@@ -121,6 +125,7 @@ void registerAccountHolder(Bank &bank, UserManager &userManager)
     } while (!isValidPassword(password));
 
     AccountHolder *holder = bank.registerAccountHolder(name, email, phoneNumber, username, password);
+
     if (holder != nullptr)
     {
         std::cout << "Account Holder registered . User ID: " << holder->getUserId() << std::endl;
@@ -154,6 +159,7 @@ void registerAdmin(Bank &bank, UserManager &userManager)
     } while (!isValidPassword(password));
 
     Admin *admin = bank.registerAdmin(name, username, password);
+
     if (admin != nullptr)
     {
         std::cout << "Admin registered . User ID: " << admin->getUserId() << std::endl;
@@ -169,6 +175,7 @@ void loginUser(Authentication &auth, Bank &bank, UserManager &userManager)
     std::getline(std::cin, password);
 
     User *user = auth.login(username, password);
+
     if (!user)
     {
         std::cout << "Login failed. Invalid credentials" << std::endl;
@@ -207,26 +214,31 @@ void loginAdmin(Admin *admin, Authentication &auth, Bank &bank, UserManager &use
             viewAllAccount(bank);
             break;
         }
+
         case 2:
         {
             removeUser(bank);
             break;
         }
+
         case 3:
         {
             registerUser(bank, userManager);
             break;
         }
+
         case 4:
         {
-            personalBankAccount(admin,auth,bank);
+            personalBankAccount(admin, auth, bank);
             break;
         }
+
         case 5:
             auth.logout(admin);
             std::cout << "Logged out" << std::endl;
             session = false;
             break;
+
         default:
             std::cout << "Invalid option" << std::endl;
         }
@@ -256,16 +268,19 @@ void loginAccountHolder(AccountHolder *holder, Authentication &auth, Bank &bank)
             createAccount(bank, holder);
             break;
         }
+
         case 2:
         {
             depositMoney(holder);
             break;
         }
+
         case 3:
         {
             withdrawMoney(holder);
             break;
         }
+
         case 4:
         {
             viewMiniStatements(holder);
@@ -274,11 +289,13 @@ void loginAccountHolder(AccountHolder *holder, Authentication &auth, Bank &bank)
         case 5:
             showBalance(holder);
             break;
+
         case 6:
             auth.logout(holder);
             std::cout << "Logged out" << std::endl;
             session = false;
             break;
+
         default:
             std::cout << "Invalid option" << std::endl;
         }
@@ -311,6 +328,7 @@ void viewMiniStatements(AccountHolder *holder)
         std::cout << "Account not found" << std::endl;
     }
 }
+
 void viewAllAccount(Bank &bank)
 {
     const std::vector<Account *> &accounts = bank.getAllAccounts();
@@ -435,7 +453,7 @@ void showBalance(AccountHolder *holder)
     }
 }
 
-void personalBankAccount(Admin* admin, Authentication& auth, Bank& bank)
+void personalBankAccount(Admin *admin, Authentication &auth, Bank &bank)
 {
     AccountHolder *accountHolder = nullptr;
 

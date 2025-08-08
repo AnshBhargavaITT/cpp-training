@@ -1,11 +1,11 @@
 #include "accountHolder.h"
 
-AccountHolder::AccountHolder(int id, 
-                             const std::string& name, 
-                             const std::string& email,
-                             const std::string& phone,
-                             const std::string& username,
-                             const std::string& password)
+AccountHolder::AccountHolder(int id,
+                             const std::string &name,
+                             const std::string &email,
+                             const std::string &phone,
+                             const std::string &username,
+                             const std::string &password)
 {
     this->userId = id;
     this->name = name;
@@ -16,11 +16,11 @@ AccountHolder::AccountHolder(int id,
     this->role = Role::ACCOUNT_HOLDER;
 }
 
-bool AccountHolder::depositToAccount(int accountNumber, double amount) 
+bool AccountHolder::depositToAccount(int accountNumber, double amount)
 {
-    for (int iteratorI = 0; iteratorI < accounts.size(); iteratorI++) 
+    for (int iteratorI = 0; iteratorI < accounts.size(); iteratorI++)
     {
-        if (accounts[iteratorI]->accountNumber == accountNumber) 
+        if (accounts[iteratorI]->accountNumber == accountNumber)
         {
             return accounts[iteratorI]->deposit(amount);
         }
@@ -28,11 +28,11 @@ bool AccountHolder::depositToAccount(int accountNumber, double amount)
     return false;
 }
 
-bool AccountHolder::withdrawFromAccount(int accountNumber, double amount) 
+bool AccountHolder::withdrawFromAccount(int accountNumber, double amount)
 {
-    for (int iteratorI = 0; iteratorI < accounts.size(); iteratorI++) 
+    for (int iteratorI = 0; iteratorI < accounts.size(); iteratorI++)
     {
-        if (accounts[iteratorI]->accountNumber == accountNumber) 
+        if (accounts[iteratorI]->accountNumber == accountNumber)
         {
             return accounts[iteratorI]->withdraw(amount);
         }
@@ -40,11 +40,11 @@ bool AccountHolder::withdrawFromAccount(int accountNumber, double amount)
     return false;
 }
 
-std::vector<Transaction*> AccountHolder::getMiniStatement(int accountNumber) 
+std::vector<Transaction *> AccountHolder::getMiniStatement(int accountNumber)
 {
-    for (int iteratorI = 0; iteratorI < accounts.size(); iteratorI++) 
+    for (int iteratorI = 0; iteratorI < accounts.size(); iteratorI++)
     {
-        if (accounts[iteratorI]->accountNumber == accountNumber) 
+        if (accounts[iteratorI]->accountNumber == accountNumber)
         {
             return accounts[iteratorI]->bankStatement();
         }
@@ -52,26 +52,26 @@ std::vector<Transaction*> AccountHolder::getMiniStatement(int accountNumber)
     return {};
 }
 
-std::vector<int> AccountHolder::getAccountNumbers() 
+std::vector<int> AccountHolder::getAccountNumbers()
 {
     std::vector<int> account;
-    for (int iteratorI = 0; iteratorI < accounts.size(); iteratorI++) 
+    for (int iteratorI = 0; iteratorI < accounts.size(); iteratorI++)
     {
         account.push_back(accounts[iteratorI]->accountNumber);
     }
     return account;
 }
 
-void AccountHolder::addAccount(Account* account) 
+void AccountHolder::addAccount(Account *account)
 {
     accounts.push_back(account);
 }
 
-Account* AccountHolder::getAccountDetailsByAccountNumber(int accountNumber) 
+Account *AccountHolder::getAccountDetailsByAccountNumber(int accountNumber)
 {
-    for (Account* account : accounts) 
+    for (Account *account : accounts)
     {
-        if (account->accountNumber == accountNumber) 
+        if (account->accountNumber == accountNumber)
         {
             return account;
         }
@@ -79,12 +79,12 @@ Account* AccountHolder::getAccountDetailsByAccountNumber(int accountNumber)
     return nullptr;
 }
 
-int AccountHolder::getUserId() const {return userId;}
+int AccountHolder::getUserId() const { return userId; }
 
-std::string AccountHolder::getName() const {return name;}
+std::string AccountHolder::getName() const { return name; }
 
-std::string AccountHolder::getUsername() const {return username;}
+std::string AccountHolder::getUsername() const { return username; }
 
-std::string AccountHolder::getPassword() const {return password;}
+std::string AccountHolder::getPassword() const { return password; }
 
-Role AccountHolder::getRole() const {return role;}
+Role AccountHolder::getRole() const { return role; }

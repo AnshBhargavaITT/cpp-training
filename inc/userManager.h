@@ -5,20 +5,20 @@
 #include <vector>
 #include <string>
 
-class UserManager 
+class UserManager
 {
-    std::vector<User*> users;
+    std::vector<User *> users;
 
 public:
-    void addUser(User* user);
+    void addUser(User *user);
 
     bool removeUser(int userId);
 
-    User* getUserById(int userId) const;
+    User *getUserById(int userId) const;
 
-    User* getUserByUsername(const std::string& username) const;
-    
-    const std::vector<User*>& getAllUsers() const;
+    User *getUserByUsername(const std::string &username) const;
+
+    const std::vector<User *> &getAllUsers() const;
 };
 
 #endif

@@ -5,19 +5,19 @@
 #include "userManager.h"
 #include <vector>
 
-class Authentication 
+class Authentication
 {
-    UserManager* userManager;
-    std::vector<User*> loggedInUsers; 
+    UserManager *userManager;
+    std::vector<User *> loggedInUsers;
 
 public:
-    Authentication(UserManager* manager);
-    
-    User* login(const std::string& username, const std::string& password);
+    Authentication(UserManager *manager);
 
-    bool logout(User* user);
+    User *login(const std::string &username, const std::string &password);
 
-    bool isLoggedIn(User* user) const;
+    bool logout(User *user);
+
+    bool isLoggedIn(User *user) const;
 };
 
 #endif

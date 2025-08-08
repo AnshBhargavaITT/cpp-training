@@ -5,31 +5,31 @@
 #include "account.h"
 #include <vector>
 
-class AccountHolder : public User 
+class AccountHolder : public User
 {
     std::string email;
     std::string phoneNumber;
-    std::vector<Account*> accounts;
+    std::vector<Account *> accounts;
 
 public:
-    AccountHolder(int id, 
-                  const std::string& name, 
-                  const std::string& email,
-                  const std::string& phone, 
-                  const std::string& username,
-                  const std::string& password);
+    AccountHolder(int id,
+                  const std::string &name,
+                  const std::string &email,
+                  const std::string &phone,
+                  const std::string &username,
+                  const std::string &password);
 
     bool depositToAccount(int accountNumber, double amount);
 
     bool withdrawFromAccount(int accountNumber, double amount);
 
-    std::vector<Transaction*> getMiniStatement(int accountNumber);
+    std::vector<Transaction *> getMiniStatement(int accountNumber);
 
     std::vector<int> getAccountNumbers();
 
-    Account* getAccountDetailsByAccountNumber(int accountNumber);
+    Account *getAccountDetailsByAccountNumber(int accountNumber);
 
-    void addAccount(Account* account);
+    void addAccount(Account *account);
 
     int getUserId() const override;
 
@@ -38,7 +38,7 @@ public:
     std::string getUsername() const override;
 
     std::string getPassword() const override;
-    
+
     Role getRole() const override;
 };
 

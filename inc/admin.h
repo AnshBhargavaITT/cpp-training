@@ -4,14 +4,15 @@
 #include "users.h"
 #include "accountHolder.h"
 
-class Admin : public User 
+class Admin : public User
 {
-    AccountHolder* accountHolderProfile = nullptr;
+    AccountHolder *accountHolderProfile = nullptr;
+
 public:
-    Admin(int id, 
-          const std::string& name, 
-          const std::string& username, 
-          const std::string& password);
+    Admin(int id,
+          const std::string &name,
+          const std::string &username,
+          const std::string &password);
 
     int getUserId() const override;
 
@@ -20,14 +21,14 @@ public:
     std::string getUsername() const override;
 
     std::string getPassword() const override;
-    
+
     Role getRole() const override;
 
-    void setAccountHolderProfile(AccountHolder* profile);
+    void setAccountHolderProfile(AccountHolder *profile);
 
     bool hasBankAccount() const;
 
-    AccountHolder* getAccountHolderProfile();
+    AccountHolder *getAccountHolderProfile();
 };
 
 #endif

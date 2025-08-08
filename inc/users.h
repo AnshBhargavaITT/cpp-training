@@ -4,7 +4,7 @@
 #include <string>
 #include "enums.h"
 
-class User 
+class User
 {
 protected:
     int userId;
@@ -15,18 +15,18 @@ protected:
 
 public:
     virtual ~User() {}
-    
+
     virtual int getUserId() const = 0;
 
     virtual std::string getName() const = 0;
 
     virtual std::string getUsername() const = 0;
 
-    virtual std::string getPassword() const=0;
+    virtual std::string getPassword() const = 0;
 
     virtual Role getRole() const = 0;
 
-    virtual bool verifyPassword(const std::string& inputPassword) const ;
+    virtual bool verifyPassword(const std::string &inputPassword) const;
 };
 
 #endif
