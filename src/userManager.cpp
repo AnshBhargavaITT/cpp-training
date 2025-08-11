@@ -3,7 +3,7 @@
 
 void UserManager::addUser(User *user)
 {
-    if (getUserByUsername(user->getUsername()) == nullptr)
+    if (getUserByUsername(user->getUsername()) == nullptr && getUserById(user->getUserId()) == nullptr)
     {
         users.push_back(user);
     }

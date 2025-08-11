@@ -307,7 +307,7 @@ void printTransactions(const std::vector<Transaction *> &transactions)
     std::cout << "Transactions" << std::endl;
     for (Transaction *transaction : transactions)
     {
-        std::cout << transaction->displayTransactionDetail() << std::endl;
+        std::cout << transaction->getTransactionDetail() << std::endl;
     }
 }
 
@@ -340,7 +340,7 @@ void viewAllAccount(Bank &bank)
     {
         for (Account *account : accounts)
         {
-            std::cout << "Account Number: " << account->accountNumber << ", Balance: " << account->balance << std::endl;
+            std::cout << "Account Number: " << account->getAccountNumber() << ", Balance: " << account->getBalance() << std::endl;
         }
     }
 }
@@ -378,7 +378,7 @@ void createAccount(Bank &bank, AccountHolder *holder)
 
     AccountType type = (accountType == 1) ? AccountType::CURRENT_ACCOUNT : AccountType::SAVING_ACCOUNT;
     Account *account = bank.createAccount(holder, type);
-    std::cout << "Account created . Account Number: " << account->accountNumber << std::endl;
+    std::cout << "Account created . Account Number: " << account->getAccountNumber() << std::endl;
 }
 
 void depositMoney(AccountHolder *holder)
@@ -445,7 +445,7 @@ void showBalance(AccountHolder *holder)
     Account *account = holder->getAccountDetailsByAccountNumber(accountNumber);
     if (account)
     {
-        std::cout << "Current Balance: " << account->balance << std::endl;
+        std::cout << "Current Balance: " << account->getBalance() << std::endl;
     }
     else
     {

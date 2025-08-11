@@ -7,11 +7,12 @@
 
 class Account
 {
-public:
+    protected:
     int accountNumber;
     double balance;
     std::vector<Transaction *> transactions;
 
+public:
     Account();
 
     virtual ~Account();
@@ -23,6 +24,13 @@ public:
     virtual std::vector<Transaction *> bankStatement();
 
     virtual AccountType getAccountType() const = 0;
+
+    int getAccountNumber() const;
+
+    double getBalance() const;
+
+    void setAccountNumber(int accountNumber) ;
+
 };
 
 #endif

@@ -10,6 +10,7 @@ class UserManager
     std::vector<User *> users;
 
 public:
+
     void addUser(User *user);
 
     bool removeUser(int userId);

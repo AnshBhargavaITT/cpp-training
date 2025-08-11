@@ -20,7 +20,7 @@ bool AccountHolder::depositToAccount(int accountNumber, double amount)
 {
     for (int iteratorI = 0; iteratorI < accounts.size(); iteratorI++)
     {
-        if (accounts[iteratorI]->accountNumber == accountNumber)
+        if (accounts[iteratorI]->getAccountNumber() == accountNumber)
         {
             return accounts[iteratorI]->deposit(amount);
         }
@@ -32,7 +32,7 @@ bool AccountHolder::withdrawFromAccount(int accountNumber, double amount)
 {
     for (int iteratorI = 0; iteratorI < accounts.size(); iteratorI++)
     {
-        if (accounts[iteratorI]->accountNumber == accountNumber)
+        if (accounts[iteratorI]->getAccountNumber() == accountNumber)
         {
             return accounts[iteratorI]->withdraw(amount);
         }
@@ -44,7 +44,7 @@ std::vector<Transaction *> AccountHolder::getMiniStatement(int accountNumber)
 {
     for (int iteratorI = 0; iteratorI < accounts.size(); iteratorI++)
     {
-        if (accounts[iteratorI]->accountNumber == accountNumber)
+        if (accounts[iteratorI]->getAccountNumber() == accountNumber)
         {
             return accounts[iteratorI]->bankStatement();
         }
@@ -57,7 +57,7 @@ std::vector<int> AccountHolder::getAccountNumbers()
     std::vector<int> account;
     for (int iteratorI = 0; iteratorI < accounts.size(); iteratorI++)
     {
-        account.push_back(accounts[iteratorI]->accountNumber);
+        account.push_back(accounts[iteratorI]->getAccountNumber());
     }
     return account;
 }
@@ -71,10 +71,7 @@ Account *AccountHolder::getAccountDetailsByAccountNumber(int accountNumber)
 {
     for (Account *account : accounts)
     {
-        if (account->accountNumber == accountNumber)
-        {
-            return account;
-        }
+        if (account->getAccountNumber() == accountNumber) { return account; }
     }
     return nullptr;
 }

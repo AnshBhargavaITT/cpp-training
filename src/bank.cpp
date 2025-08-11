@@ -41,12 +41,6 @@ AccountHolder *Bank::registerAccountHolder(const std::string &name,
 
     int id = rand() % 900000 + 100000;
 
-    if (userManager->getUserById(id))
-    {
-        std::cout << "UserId Already exist" << std::endl;
-        return nullptr;
-    }
-
     User *existingUser = userManager->getUserByUsername(username);
 
     if (existingUser && existingUser->getRole() == Role::ACCOUNT_HOLDER)
@@ -74,11 +68,6 @@ Admin *Bank::registerAdmin(const std::string &name, const std::string &username,
         return nullptr;
     }
     int id = rand() % 900000 + 100000;
-    if (userManager->getUserById(id))
-    {
-        std::cout << "UserId Already exist" << std::endl;
-        return nullptr;
-    }
 
     if (userManager->getUserByUsername(username))
     {
@@ -105,7 +94,7 @@ Account *Bank::createAccount(AccountHolder *holder, AccountType type)
     }
 
     int accountNumberGenerator = rand() % 900000000 + 100000000;;
-    account->accountNumber = accountNumberGenerator;
+    account->setAccountNumber(accountNumberGenerator);
     accounts.push_back(account);
     holder->addAccount(account);
     return account;
@@ -115,7 +104,7 @@ bool Bank::closeAccount(int accountNumber)
 {
     for (int iteratorI = 0; iteratorI < accounts.size(); iteratorI++)
     {
-        if (accounts[iteratorI]->accountNumber == accountNumber)
+        if (accounts[iteratorI]->getAccountNumber() == accountNumber)
         {
             delete accounts[iteratorI];
             accounts.erase(accounts.begin() + iteratorI);
@@ -133,7 +122,7 @@ std::vector<Account *> Bank::getAccountsByUser(AccountHolder *holder)
         std::vector<int> userAccountNumber = holder->getAccountNumbers();
         for (int accountNumber : userAccountNumber)
         {
-            if (account->accountNumber == accountNumber)
+            if (account->getAccountNumber() == accountNumber)
             {
                 result.push_back(account);
                 break;
@@ -163,7 +152,7 @@ bool Bank::removeUser(int userId)
         std::vector<Account *> accountsToRemove = getAccountsByUser(holder);
         for (Account *account : accountsToRemove)
         {
-            closeAccount(account->accountNumber);
+            closeAccount(account->getAccountNumber());
         }
     }
 
