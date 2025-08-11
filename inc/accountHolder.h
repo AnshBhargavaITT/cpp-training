@@ -3,6 +3,7 @@
 
 #include "users.h"
 #include "account.h"
+#include "userInfo.h"
 #include <vector>
 
 class AccountHolder : public User
@@ -12,12 +13,9 @@ class AccountHolder : public User
     std::vector<Account *> accounts;
 
 public:
-    AccountHolder(int id,
-                  const std::string &name,
-                  const std::string &email,
-                  const std::string &phone,
-                  const std::string &username,
-                  const std::string &password);
+     AccountHolder(const UserInfo &info, 
+                  const std::string &email, 
+                  const std::string &phone);
 
     bool depositToAccount(int accountNumber, double amount);
 

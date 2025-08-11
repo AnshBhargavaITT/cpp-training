@@ -3,16 +3,14 @@
 
 #include "users.h"
 #include "accountHolder.h"
+#include "userInfo.h"
 
 class Admin : public User
 {
     AccountHolder *accountHolderProfile = nullptr;
 
 public:
-    Admin(int id,
-          const std::string &name,
-          const std::string &username,
-          const std::string &password);
+    Admin(const UserInfo &info);
 
     int getUserId() const override;
 

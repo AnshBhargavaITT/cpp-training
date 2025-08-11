@@ -1,20 +1,11 @@
 #include "accountHolder.h"
 
-AccountHolder::AccountHolder(int id,
-                             const std::string &name,
-                             const std::string &email,
-                             const std::string &phone,
-                             const std::string &username,
-                             const std::string &password)
-{
-    this->userId = id;
-    this->name = name;
-    this->email = email;
-    this->phoneNumber = phone;
-    this->username = username;
-    this->password = password;
-    this->role = Role::ACCOUNT_HOLDER;
-}
+AccountHolder::AccountHolder(const UserInfo &info, 
+                             const std::string &email, 
+                             const std::string &phoneNumber)
+    : User(info),  
+      email(email),
+      phoneNumber(phoneNumber){}
 
 bool AccountHolder::depositToAccount(int accountNumber, double amount)
 {

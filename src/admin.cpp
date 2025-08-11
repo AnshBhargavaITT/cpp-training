@@ -1,14 +1,9 @@
 #include "admin.h"
 #include "accountHolder.h"
+#include "userInfo.h"
 
-Admin::Admin(int id, const std::string &name, const std::string &username, const std::string &password)
-{
-    this->userId = id;
-    this->name = name;
-    this->username = username;
-    this->password = password;
-    this->role = Role::ADMIN;
-}
+Admin::Admin(const UserInfo &info)
+    : User(info){}
 
 int Admin::getUserId() const { return userId; }
 

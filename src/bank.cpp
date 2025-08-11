@@ -23,7 +23,7 @@ AccountHolder *Bank::registerAccountHolder(const std::string &name,
 
     if (!isValidEmail(email))
     {
-        std::cout << "Email must be a valid" << std::endl;
+        std::cout << "Email must be valid" << std::endl;
         return nullptr;
     }
 
@@ -35,7 +35,7 @@ AccountHolder *Bank::registerAccountHolder(const std::string &name,
 
     if (!isValidPassword(password))
     {
-        std::cout << "Password must be min 7 digits" << std::endl;
+        std::cout << "Password must be min 7 characters" << std::endl;
         return nullptr;
     }
 
@@ -45,11 +45,12 @@ AccountHolder *Bank::registerAccountHolder(const std::string &name,
 
     if (existingUser && existingUser->getRole() == Role::ACCOUNT_HOLDER)
     {
-        std::cout << "UserName Already exist for Account Holder" << std::endl;
+        std::cout << "Username already exists for Account Holder" << std::endl;
         return nullptr;
     }
 
-    AccountHolder *holder = new AccountHolder(id, name, email, phone, username, password);
+    UserInfo info{id, name, username, password, Role::ACCOUNT_HOLDER};
+    AccountHolder *holder = new AccountHolder(info, email, phone);
     userManager->addUser(holder);
     return holder;
 }
@@ -64,18 +65,20 @@ Admin *Bank::registerAdmin(const std::string &name, const std::string &username,
 
     if (!isValidPassword(password))
     {
-        std::cout << "Password must be min 7 digits" << std::endl;
+        std::cout << "Password must be min 7 characters" << std::endl;
         return nullptr;
     }
-    int id = rand() % 900000 + 100000;
 
     if (userManager->getUserByUsername(username))
     {
-        std::cout << "UserName Already exist" << std::endl;
+        std::cout << "Username already exists" << std::endl;
         return nullptr;
     }
 
-    Admin *admin = new Admin(id, name, username, password);
+    int id = rand() % 900000 + 100000;
+
+    UserInfo info{id, name, username, password, Role::ADMIN};
+    Admin *admin = new Admin(info);
     userManager->addUser(admin);
     return admin;
 }
@@ -93,7 +96,7 @@ Account *Bank::createAccount(AccountHolder *holder, AccountType type)
         account = new SavingsAccount();
     }
 
-    int accountNumberGenerator = rand() % 900000000 + 100000000;;
+    int accountNumberGenerator = rand() % 900000000 + 100000000;
     account->setAccountNumber(accountNumberGenerator);
     accounts.push_back(account);
     holder->addAccount(account);
@@ -117,10 +120,11 @@ bool Bank::closeAccount(int accountNumber)
 std::vector<Account *> Bank::getAccountsByUser(AccountHolder *holder)
 {
     std::vector<Account *> result;
+    std::vector<int> userAccountNumbers = holder->getAccountNumbers();
+
     for (Account *account : accounts)
     {
-        std::vector<int> userAccountNumber = holder->getAccountNumbers();
-        for (int accountNumber : userAccountNumber)
+        for (int accountNumber : userAccountNumbers)
         {
             if (account->getAccountNumber() == accountNumber)
             {
