@@ -21,7 +21,7 @@ int main()
     }
     File<<"Hi there , I am working on C++ \n I am performing Read Write Operation on File"<<std::endl;
 
-    //File.seekg(0,std::ios::beg);
+    File.seekg(0,std::ios::beg);
     std::string line;
     while(getline(File,line))
     {
