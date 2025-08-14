@@ -1,0 +1,49 @@
+<people>
+  <person>
+    <name>Alice</name>
+    <age>30</age>
+    <hobbies>
+      <hobby>reading</hobby>
+      <hobby>hiking</hobby>
+      <hobby>painting</hobby>
+    </hobbies>
+    <details married="false" children="null">
+      <address>
+        <street>123 Maple St</street>
+        <city>Wonderland</city>
+        <zip>12345</zip>
+      </address>
+    </details>
+  </person>
+  <person>
+    <name>Bob</name>
+    <age>45</age>
+    <hobbies>
+      <hobby>fishing</hobby>
+      <hobby>cycling</hobby>
+    </hobbies>
+    <details married="true" children="Charlie, Daisy">
+      <address>
+        <street>456 Oak St</street>
+        <city>Mystic Falls</city>
+        <zip>67890</zip>
+      </address>
+    </details>
+  </person>
+  <person>
+    <name>Carol</name>
+    <age>29</age>
+    <hobbies>
+      <hobby>writing</hobby>
+      <hobby>gaming</hobby>
+      <hobby>cooking</hobby>
+    </hobbies>
+    <details married="false" children="null">
+      <address>
+        <street>789 Pine St</street>
+        <city>Dreamland</city>
+        <zip>10112</zip>
+      </address>
+    </details>
+  </person>
+</people>
