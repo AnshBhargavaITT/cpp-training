@@ -3,8 +3,6 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
-void printJsonFormatted(const nlohmann::json &node, int indentLevel = 0);
-
 JSONParser::ParseStatus JSONParser::parse(const std::string &filename)
 {
     try
@@ -29,10 +27,10 @@ JSONParser::ParseStatus JSONParser::parse(const std::string &filename)
         if (!json.is_object() && !json.is_array())
         {
             std::cout << "JSON root is neither object nor array: " << filename << std::endl;
-            return ParseStatus::InvalidRootType;  
+            return ParseStatus::InvalidRootType;
         }
 
-        std::cout << "Parsed JSON:\n";
+        std::cout << "Parsed JSON:" << std::endl;
         printJsonFormatted(json, 0);
 
         return ParseStatus::Success;
@@ -49,7 +47,7 @@ JSONParser::ParseStatus JSONParser::parse(const std::string &filename)
     }
 }
 
-inline void printJsonFormatted(const nlohmann::json &node, int indentLevel)
+void JSONParser::printJsonFormatted(const nlohmann::json &node, int indentLevel)
 {
     std::string padding(indentLevel, ' ');
 
@@ -60,11 +58,11 @@ inline void printJsonFormatted(const nlohmann::json &node, int indentLevel)
             std::cout << padding << iteratorI.key() << ": ";
             if (iteratorI.value().is_primitive())
             {
-                std::cout << iteratorI.value() << "\n";
+                std::cout << iteratorI.value() << std::endl;
             }
             else
             {
-                std::cout << "\n";
+                std::cout << std::endl;
                 printJsonFormatted(iteratorI.value(), indentLevel + 4);
             }
         }
@@ -75,11 +73,11 @@ inline void printJsonFormatted(const nlohmann::json &node, int indentLevel)
         {
             if (iteratorI->is_primitive())
             {
-                std::cout << padding << "- " << *iteratorI << "\n";
+                std::cout << padding << "- " << *iteratorI << std::endl;
             }
             else
             {
-                std::cout << padding << "-\n";
+                std::cout << padding << "-" << std::endl;
                 printJsonFormatted(*iteratorI, indentLevel + 4);
             }
         }

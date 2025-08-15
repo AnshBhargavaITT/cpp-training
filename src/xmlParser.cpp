@@ -3,8 +3,6 @@
 #include <fstream>
 #include <pugixml.hpp>
 
-void printXmlNode(const pugi::xml_node &node, int indentLevel);
-
 XMLParser::ParseStatus XMLParser::parse(const std::string &filename)
 {
     try
@@ -12,14 +10,14 @@ XMLParser::ParseStatus XMLParser::parse(const std::string &filename)
         std::ifstream file(filename, std::ios::in | std::ios::binary);
         if (!file)
         {
-            std::cerr << "Error: Cannot open XML file: " << filename << std::endl;
+            std::cout << "Error: Cannot open XML file: " << filename << std::endl;
             return ParseStatus::FileNotFound;
         }
 
         file.seekg(0, std::ios::end);
         if (file.tellg() == 0)
         {
-            std::cerr << "Error: XML file is empty: " << filename << std::endl;
+            std::cout << "Error: XML file is empty: " << filename << std::endl;
             return ParseStatus::FileEmpty;
         }
 
@@ -32,23 +30,23 @@ XMLParser::ParseStatus XMLParser::parse(const std::string &filename)
 
         if (!result)
         {
-            std::cerr << "Parse failed: " << result.description() << " (offset: " << result.offset << ")" << std::endl;
+            std::cout << "Parse failed: " << result.description() << std::endl;
             return ParseStatus::ParseFailed;
         }
 
-        std::cout << "Parsed XML:\n";
+        std::cout << "Parsed XML:" << std::endl;
         printXmlNode(document.document_element(), 0);
 
         return ParseStatus::Success;
     }
     catch (const std::exception &e)
     {
-        std::cerr << "XMLParser Exception: " << e.what() << std::endl;
+        std::cout << "XMLParser Exception: " << e.what() << std::endl;
         return ParseStatus::UnknownError;
     }
 }
 
-void printXmlNode(const pugi::xml_node &node, int indentLevel)
+void XMLParser::printXmlNode(const pugi::xml_node &node, int indentLevel)
 {
     std::string padding(indentLevel * 2, ' ');
 
@@ -66,7 +64,7 @@ void printXmlNode(const pugi::xml_node &node, int indentLevel)
     {
         std::cout << ": " << child.value();
     }
-    std::cout << "\n";
+    std::cout << std::endl;
 
     pugi::xml_node childNode = node.first_child();
     while (childNode)

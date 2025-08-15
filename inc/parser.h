@@ -15,7 +15,9 @@ public:
         InvalidRootType,
         UnknownError
     };
+
     virtual ~Parser() {}
+
     virtual ParseStatus parse(const std::string &filename) = 0;
 };
 

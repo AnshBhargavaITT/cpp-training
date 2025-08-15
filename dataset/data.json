@@ -16,11 +16,11 @@
     },
     {
       "name": "Sumit",
-      "age": 25,
-      "hobbies": ["fishing", "cycling"],
+      "age": 27,
+      "hobbies": ["biking", "cycling"],
       "details": {
         "married": true,
-        "children": ["Charlie", "Daisy"],
+        "children": ["Charlie", "Laila"],
         "address": {
           "street": "Begur",
           "city": "Bengaluru",
@@ -29,7 +29,7 @@
       }
     },
     {
-      "name": "Carol",
+      "name": "Yash",
       "age": 24,
       "hobbies": ["writing", "gaming", "cooking"],
       "details": {

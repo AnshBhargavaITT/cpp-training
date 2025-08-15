@@ -1,7 +1,7 @@
 <people>
   <person>
-    <name>Alice</name>
-    <age>30</age>
+    <name>Ansh</name>
+    <age>23</age>
     <hobbies>
       <hobby>reading</hobby>
       <hobby>hiking</hobby>
@@ -9,30 +9,30 @@
     </hobbies>
     <details married="false" children="null">
       <address>
-        <street>123 Maple St</street>
-        <city>Wonderland</city>
-        <zip>12345</zip>
+        <street>Silk Board</street>
+        <city>Bengaluru</city>
+        <zip>560029</zip>
       </address>
     </details>
   </person>
   <person>
-    <name>Bob</name>
-    <age>45</age>
+    <name>Sumit</name>
+    <age>27</age>
     <hobbies>
-      <hobby>fishing</hobby>
+      <hobby>biking</hobby>
       <hobby>cycling</hobby>
     </hobbies>
-    <details married="true" children="Charlie, Daisy">
+    <details married="true" children="Charlie, Laila">
       <address>
-        <street>456 Oak St</street>
-        <city>Mystic Falls</city>
-        <zip>67890</zip>
+        <street>Begur</street>
+        <city>Bengaluru</city>
+        <zip>560068</zip>
       </address>
     </details>
   </person>
   <person>
-    <name>Carol</name>
-    <age>29</age>
+    <name>Yash</name>
+    <age>24</age>
     <hobbies>
       <hobby>writing</hobby>
       <hobby>gaming</hobby>
@@ -40,9 +40,10 @@
     </hobbies>
     <details married="false" children="null">
       <address>
-        <street>789 Pine St</street>
-        <city>Dreamland</city>
-        <zip>10112</zip>
+        <street>Spice Garden</street>
+        <city>Bengaluru</city>
+        <!-- Comment -->
+        <zip>560012</zip>
       </address>
     </details>
   </person>

@@ -4,10 +4,6 @@
 #include <string>
 #include "csvParser.h"
 
-int countQuotes(const std::string &completeLine);
-
-std::vector<std::string> parseLine(const std::string &completeLine);
-
 CSVParser::ParseStatus CSVParser::parse(const std::string &filename)
 {
     try
@@ -26,11 +22,13 @@ CSVParser::ParseStatus CSVParser::parse(const std::string &filename)
             std::cout << "CSV file is empty : " << filename << std::endl;
             return ParseStatus::FileEmpty;
         }
+
         file.seekg(0, std::ios::beg);
 
         std::string line;
         std::string completeLine;
         bool inQuotes = false;
+        std::cout << "Parsed CSV :" << std::endl;
 
         while (std::getline(file, line))
         {
@@ -51,7 +49,6 @@ CSVParser::ParseStatus CSVParser::parse(const std::string &filename)
 
             std::vector<std::string> row = parseLine(completeLine);
 
-            std::cout << "Parsed CSV :" << std::endl;
             for (int iteratorI = 0; iteratorI < row.size(); iteratorI++)
             {
                 std::cout << "[" << row[iteratorI] << "] ";
@@ -70,7 +67,7 @@ CSVParser::ParseStatus CSVParser::parse(const std::string &filename)
     }
 }
 
-int countQuotes(const std::string &completeLine)
+int CSVParser::countQuotes(const std::string &completeLine)
 {
     int quoteCount = 0;
     for (int iteratorI = 0; iteratorI < completeLine.size(); iteratorI++)
@@ -83,7 +80,7 @@ int countQuotes(const std::string &completeLine)
     return quoteCount;
 }
 
-std::vector<std::string> parseLine(const std::string &completeLine)
+std::vector<std::string> CSVParser::parseLine(const std::string &completeLine)
 {
     std::vector<std::string> row;
     std::string cell;
