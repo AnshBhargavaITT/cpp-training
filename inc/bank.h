@@ -19,7 +19,8 @@ public:
                                          const std::string &email,
                                          const std::string &phone,
                                          const std::string &username,
-                                         const std::string &password);
+                                         const std::string &password,
+                                         int exisitngID);
 
     Admin *registerAdmin(const std::string &name,
                          const std::string &username,
@@ -29,9 +30,15 @@ public:
 
     bool closeAccount(int accountNumber);
 
-    std::vector<Account *> getAccountsByUser(AccountHolder *holder);
+    std::vector<Account *> getAccountsByUser(User *user);
 
-    bool removeUser(int userId);
+    AccountHolder *getAccountHolderById(int userId);
+
+    bool removeUser(int userId, int requesterId);
+
+    bool removeAccount(int userId, int accountNumber);
+
+    int getUserIdByAccount(Account* account);
 
     User *getUser(int userId);
 

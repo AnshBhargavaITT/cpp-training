@@ -16,10 +16,6 @@ public:
 
     std::string getName() const override;
 
-    std::string getUsername() const override;
-
-    std::string getPassword() const override;
-
     Role getRole() const override;
 
     void setAccountHolderProfile(AccountHolder *profile);

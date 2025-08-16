@@ -8,8 +8,6 @@ struct UserInfo
 {
     int id;
     std::string name;
-    std::string username;
-    std::string password;
     Role role;
 };
 
@@ -19,4 +17,4 @@ struct AccountHolderInfo : public UserInfo
     std::string phoneNumber;
 };
 
-#endif 
+#endif

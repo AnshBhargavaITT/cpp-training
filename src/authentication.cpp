@@ -1,43 +1,29 @@
 #include "authentication.h"
 
-Authentication::Authentication(UserManager *manager) { userManager = manager; }
+Authentication::Authentication(UserManager *manager)
+{
+    userManager = manager;
+    currentUser = nullptr;
+}
 
 User *Authentication::login(const std::string &username, const std::string &password)
 {
-    User *user = userManager->getUserByUsername(username);
-    if (user && user->verifyPassword(password))
+    if (userManager->verifyCredentials(username, password))
     {
-        if (isLoggedIn(user))
-        {
-            return user;
-        }
-        loggedInUsers.push_back(user);
-        return user;
+        currentUser = userManager->getUserByUsername(username);
+        return currentUser;
     }
     return nullptr;
 }
 
-bool Authentication::logout(User *user)
+bool Authentication::logout()
 {
-    for (int iteratorI = 0; iteratorI < loggedInUsers.size(); iteratorI++)
+    if (currentUser != nullptr)
     {
-        if (loggedInUsers[iteratorI]->getUserId() == user->getUserId())
-        {
-            loggedInUsers.erase(loggedInUsers.begin() + iteratorI);
-            return true;
-        }
+        currentUser = nullptr;
+        return true;
     }
     return false;
 }
 
-bool Authentication::isLoggedIn(User *user) const
-{
-    for (int iteratorI = 0; iteratorI < loggedInUsers.size(); iteratorI++)
-    {
-        if (loggedInUsers[iteratorI]->getUserId() == user->getUserId())
-        {
-            return true;
-        }
-    }
-    return false;
-}
+User *Authentication::getCurrentUser() const { return currentUser; }

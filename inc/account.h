@@ -7,7 +7,7 @@
 
 class Account
 {
-    protected:
+protected:
     int accountNumber;
     double balance;
     std::vector<Transaction *> transactions;
@@ -29,8 +29,7 @@ public:
 
     double getBalance() const;
 
-    void setAccountNumber(int accountNumber) ;
-
+    void setAccountNumber(int accountNumber);
 };
 
 #endif

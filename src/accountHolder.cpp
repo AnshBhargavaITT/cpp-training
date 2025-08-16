@@ -1,11 +1,7 @@
 #include "accountHolder.h"
 
-AccountHolder::AccountHolder(const UserInfo &info, 
-                             const std::string &email, 
-                             const std::string &phoneNumber)
-    : User(info),  
-      email(email),
-      phoneNumber(phoneNumber){}
+AccountHolder::AccountHolder(const AccountHolderInfo &info)
+    : User(info), email(info.email), phoneNumber(info.phoneNumber) {}
 
 bool AccountHolder::depositToAccount(int accountNumber, double amount)
 {
@@ -58,21 +54,41 @@ void AccountHolder::addAccount(Account *account)
     accounts.push_back(account);
 }
 
+bool AccountHolder::deleteAccount(int accountNumber)
+{
+    for (std::vector<Account *>::iterator iteratorI = accounts.begin(); iteratorI != accounts.end(); iteratorI++)
+    {
+        if ((*iteratorI)->getAccountNumber() == accountNumber)
+        {
+            accounts.erase(iteratorI);
+            return true;
+        }
+    }
+    return false;
+}
+
 Account *AccountHolder::getAccountDetailsByAccountNumber(int accountNumber)
 {
-    for (Account *account : accounts)
+    for (int iteratorI = 0; iteratorI < accounts.size(); iteratorI++)
     {
-        if (account->getAccountNumber() == accountNumber) { return account; }
+        if (accounts[iteratorI]->getAccountNumber() == accountNumber)
+        {
+            return accounts[iteratorI];
+        }
     }
     return nullptr;
 }
 
+void AccountHolder::setAccounts(const std::vector<Account *> &account) { accounts = account; }
+
+std::vector<Account *> AccountHolder::getAccounts() const { return accounts; }
+
+std::string AccountHolder::getEmail() const { return email; }
+
+std::string AccountHolder::getPhoneNumber() const { return phoneNumber; }
+
 int AccountHolder::getUserId() const { return userId; }
 
 std::string AccountHolder::getName() const { return name; }
-
-std::string AccountHolder::getUsername() const { return username; }
-
-std::string AccountHolder::getPassword() const { return password; }
 
 Role AccountHolder::getRole() const { return role; }

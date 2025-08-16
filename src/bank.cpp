@@ -4,16 +4,14 @@
 #include "utils.h"
 #include <iostream>
 
-Bank::Bank(UserManager *manager)
-{
-    userManager = manager;
-}
+Bank::Bank(UserManager *manager) { userManager = manager; }
 
 AccountHolder *Bank::registerAccountHolder(const std::string &name,
                                            const std::string &email,
                                            const std::string &phone,
                                            const std::string &username,
-                                           const std::string &password)
+                                           const std::string &password,
+                                           int existingID)
 {
     if (!isValidName(name))
     {
@@ -38,8 +36,15 @@ AccountHolder *Bank::registerAccountHolder(const std::string &name,
         std::cout << "Password must be min 7 characters" << std::endl;
         return nullptr;
     }
-
-    int id = rand() % 900000 + 100000;
+    int id;
+    if (existingID != -1)
+    {
+        id = existingID;
+    }
+    else
+    {
+        id = rand() % 900000 + 100000;
+    }
 
     User *existingUser = userManager->getUserByUsername(username);
 
@@ -49,9 +54,13 @@ AccountHolder *Bank::registerAccountHolder(const std::string &name,
         return nullptr;
     }
 
-    UserInfo info{id, name, username, password, Role::ACCOUNT_HOLDER};
-    AccountHolder *holder = new AccountHolder(info, email, phone);
-    userManager->addUser(holder);
+    AccountHolderInfo info{id, name, Role::ACCOUNT_HOLDER, email, phone};
+    AccountHolder *holder = new AccountHolder(info);
+    if (!userManager->addUser(holder, username, password))
+    {
+        delete holder;
+        return nullptr;
+    }
     return holder;
 }
 
@@ -77,9 +86,9 @@ Admin *Bank::registerAdmin(const std::string &name, const std::string &username,
 
     int id = rand() % 900000 + 100000;
 
-    UserInfo info{id, name, username, password, Role::ADMIN};
+    UserInfo info{id, name, Role::ADMIN};
     Admin *admin = new Admin(info);
-    userManager->addUser(admin);
+    userManager->addUser(admin, username, password);
     return admin;
 }
 
@@ -109,6 +118,15 @@ bool Bank::closeAccount(int accountNumber)
     {
         if (accounts[iteratorI]->getAccountNumber() == accountNumber)
         {
+            for (User *user : userManager->getAllUsers())
+            {
+                if (user->getRole() == Role::ACCOUNT_HOLDER)
+                {
+                    AccountHolder *holder = static_cast<AccountHolder *>(user);
+                    holder->deleteAccount(accountNumber);
+                }
+            }
+
             delete accounts[iteratorI];
             accounts.erase(accounts.begin() + iteratorI);
             return true;
@@ -117,10 +135,25 @@ bool Bank::closeAccount(int accountNumber)
     return false;
 }
 
-std::vector<Account *> Bank::getAccountsByUser(AccountHolder *holder)
+std::vector<Account *> Bank::getAccountsByUser(User *user)
 {
     std::vector<Account *> result;
-    std::vector<int> userAccountNumbers = holder->getAccountNumbers();
+    std::vector<int> userAccountNumbers;
+
+    if (user->getRole() == Role::ACCOUNT_HOLDER)
+    {
+        AccountHolder *holder = static_cast<AccountHolder *>(user);
+        userAccountNumbers = holder->getAccountNumbers();
+    }
+    else if (user->getRole() == Role::ADMIN)
+    {
+        Admin *admin = static_cast<Admin *>(user);
+        AccountHolder *profile = admin->getAccountHolderProfile();
+        if (profile)
+        {
+            userAccountNumbers = profile->getAccountNumbers();
+        }
+    }
 
     for (Account *account : accounts)
     {
@@ -136,25 +169,58 @@ std::vector<Account *> Bank::getAccountsByUser(AccountHolder *holder)
     return result;
 }
 
-bool Bank::removeUser(int userId)
+bool Bank::removeUser(int userId, int requesterId)
 {
     User *user = userManager->getUserById(userId);
+
     if (!user)
     {
         return false;
     }
 
+    if (user->getRole() == Role::ADMIN && user->getUserId() == requesterId)
+    {
+        std::cout << "Admins cannot remove themselves" << std::endl;
+        return false;
+    }
+
     if (user->getRole() == Role::ADMIN)
     {
-        std::cout << "Cannot remove an Admin User" << std::endl;
-        return false;
+        Admin *admin = static_cast<Admin *>(user);
+        AccountHolder *profile = admin->getAccountHolderProfile();
+
+        if (profile && !profile->getAccountNumbers().empty())
+        {
+            AccountHolder *newHolder = new AccountHolder(
+                AccountHolderInfo{
+                    admin->getUserId(),
+                    admin->getName(),
+                    Role::ACCOUNT_HOLDER,
+                    profile->getEmail(),
+                    profile->getPhoneNumber()});
+
+            newHolder->setAccounts(profile->getAccounts());
+
+            Credential cred = userManager->getCredentialByUserId(userId);
+            userManager->removeUser(userId);
+            userManager->addUser(newHolder, cred.username, cred.password);
+
+            std::cout << "Admin privileges removed" << std::endl;
+            return true;
+        }
+        else
+        {
+            userManager->removeUser(userId);
+            std::cout << "Admin removed." << std::endl;
+            return true;
+        }
     }
 
     if (user->getRole() == Role::ACCOUNT_HOLDER)
     {
         AccountHolder *holder = static_cast<AccountHolder *>(user);
-        std::vector<Account *> accountsToRemove = getAccountsByUser(holder);
-        for (Account *account : accountsToRemove)
+        std::vector<Account *> accountToRemove = getAccountsByUser(user);
+        for (Account *account : accountToRemove)
         {
             closeAccount(account->getAccountNumber());
         }
@@ -167,3 +233,70 @@ bool Bank::removeUser(int userId)
 User *Bank::getUser(int userId) { return userManager->getUserById(userId); }
 
 const std::vector<Account *> &Bank::getAllAccounts() const { return accounts; }
+
+bool Bank::removeAccount(int userId, int accountNumber)
+{
+    User *user = userManager->getUserById(userId);
+
+    if (!user || user->getRole() != Role::ACCOUNT_HOLDER)
+    {
+        return false;
+    }
+
+    return closeAccount(accountNumber);
+}
+
+AccountHolder *Bank::getAccountHolderById(int userId)
+{
+    User *user = getUser(userId);
+
+    if (user && user->getRole() == Role::ACCOUNT_HOLDER)
+    {
+        return static_cast<AccountHolder *>(user);
+    }
+    return nullptr;
+}
+
+int Bank::getUserIdByAccount(Account *account)
+{
+    const std::vector<User *> &allUsers = userManager->getAllUsers();
+
+    for (int iteratorI = 0; iteratorI < allUsers.size(); iteratorI++)
+    {
+        User *user = allUsers[iteratorI];
+
+        if (user->getRole() == Role::ACCOUNT_HOLDER)
+        {
+            AccountHolder *holder = static_cast<AccountHolder *>(user);
+            const std::vector<int> &accountNumbers = holder->getAccountNumbers();
+
+            for (int iteratorJ = 0; iteratorJ < accountNumbers.size(); iteratorJ++)
+            {
+                if (accountNumbers[iteratorJ] == account->getAccountNumber())
+                {
+                    return holder->getUserId();
+                }
+            }
+        }
+        else if (user->getRole() == Role::ADMIN)
+        {
+            Admin *admin = static_cast<Admin *>(user);
+            AccountHolder *linkedHolder = admin->getAccountHolderProfile();
+
+            if (linkedHolder != nullptr)
+            {
+                const std::vector<int> &accountNumbers = linkedHolder->getAccountNumbers();
+
+                for (int iteratorJ = 0; iteratorJ < accountNumbers.size(); iteratorJ++)
+                {
+                    if (accountNumbers[iteratorJ] == account->getAccountNumber())
+                    {
+                        return linkedHolder->getUserId();
+                    }
+                }
+            }
+        }
+    }
+
+    return -1;
+}

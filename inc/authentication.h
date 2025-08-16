@@ -8,16 +8,18 @@
 class Authentication
 {
     UserManager *userManager;
-    std::vector<User *> loggedInUsers;
+    User *currentUser = nullptr;
 
 public:
     Authentication(UserManager *manager);
 
     User *login(const std::string &username, const std::string &password);
 
-    bool logout(User *user);
+    bool logout();
 
-    bool isLoggedIn(User *user) const;
+    User *getCurrentUser() const;
+
+    UserManager *getUserManager() const { return userManager; }
 };
 
 #endif

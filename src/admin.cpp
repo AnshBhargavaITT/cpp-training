@@ -3,29 +3,16 @@
 #include "userInfo.h"
 
 Admin::Admin(const UserInfo &info)
-    : User(info){}
+    : User(info) {}
 
 int Admin::getUserId() const { return userId; }
 
 std::string Admin::getName() const { return name; }
 
-std::string Admin::getUsername() const { return username; }
-
-std::string Admin::getPassword() const { return password; }
-
 Role Admin::getRole() const { return role; }
 
-void Admin::setAccountHolderProfile(AccountHolder *profile)
-{
-    accountHolderProfile = profile;
-}
+void Admin::setAccountHolderProfile(AccountHolder *profile) { accountHolderProfile = profile; }
 
-bool Admin::hasBankAccount() const
-{
-    return accountHolderProfile != nullptr;
-}
+bool Admin::hasBankAccount() const { return accountHolderProfile != nullptr; }
 
-AccountHolder *Admin::getAccountHolderProfile()
-{
-    return accountHolderProfile;
-}
+AccountHolder *Admin::getAccountHolderProfile() { return accountHolderProfile; }

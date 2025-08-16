@@ -18,6 +18,7 @@ Account::~Account()
 bool Account::deposit(double amount)
 {
     if (amount <= 0) { return false; }
+    
     balance += amount;
     std::string currentDate = getCurrentDate();
     transactions.push_back(new Transaction(getAccountType(), amount, currentDate));
@@ -26,7 +27,7 @@ bool Account::deposit(double amount)
 
 std::vector<Transaction *> Account::bankStatement() { return transactions; }
 
-int Account::getAccountNumber() const {return accountNumber;}
+int Account::getAccountNumber() const { return accountNumber; }
 
 double Account::getBalance() const { return balance; }
 

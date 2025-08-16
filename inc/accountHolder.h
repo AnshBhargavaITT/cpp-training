@@ -5,6 +5,7 @@
 #include "account.h"
 #include "userInfo.h"
 #include <vector>
+#include <string>
 
 class AccountHolder : public User
 {
@@ -13,9 +14,8 @@ class AccountHolder : public User
     std::vector<Account *> accounts;
 
 public:
-     AccountHolder(const UserInfo &info, 
-                  const std::string &email, 
-                  const std::string &phone);
+
+    AccountHolder(const AccountHolderInfo &info);
 
     bool depositToAccount(int accountNumber, double amount);
 
@@ -25,17 +25,23 @@ public:
 
     std::vector<int> getAccountNumbers();
 
+    bool deleteAccount(int accountNumber);
+
     Account *getAccountDetailsByAccountNumber(int accountNumber);
 
     void addAccount(Account *account);
 
+    void setAccounts(const std::vector<Account *> &account);
+
+    std::vector<Account *> getAccounts() const;
+
+    std::string getEmail() const;
+
+    std::string getPhoneNumber() const;
+
     int getUserId() const override;
 
     std::string getName() const override;
-
-    std::string getUsername() const override;
-
-    std::string getPassword() const override;
 
     Role getRole() const override;
 };
