@@ -2,7 +2,7 @@
 #define PARSER_H
 #include <string>
 
-class Parser
+class IParser
 {
 public:
     enum class ParseStatus
@@ -16,7 +16,7 @@ public:
         UnknownError
     };
 
-    virtual ~Parser() {}
+    virtual ~IParser() {}
 
     virtual ParseStatus parse(const std::string &filename) = 0;
 };

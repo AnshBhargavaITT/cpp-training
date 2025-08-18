@@ -4,7 +4,7 @@
 #include <string>
 #include <pugixml.hpp>
 
-class XMLParser : public Parser
+class XMLParser : public IParser
 {
 public:
     ParseStatus parse(const std::string &filename) override;

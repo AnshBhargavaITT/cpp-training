@@ -4,7 +4,7 @@
 #include <string>
 #include <nlohmann/json.hpp>
 
-class JSONParser : public Parser
+class JSONParser : public IParser
 {
 public:
     ParseStatus parse(const std::string &filename) override;

@@ -53,32 +53,32 @@ void JSONParser::printJsonFormatted(const nlohmann::json &node, int indentLevel)
 
     if (node.is_object())
     {
-        for (nlohmann::json::const_iterator iteratorI = node.begin(); iteratorI != node.end(); iteratorI++)
+        for (nlohmann::json::const_iterator nodeIteratorI = node.begin(); nodeIteratorI != node.end(); nodeIteratorI++)
         {
-            std::cout << padding << iteratorI.key() << ": ";
-            if (iteratorI.value().is_primitive())
+            std::cout << padding << nodeIteratorI.key() << ": ";
+            if (nodeIteratorI.value().is_primitive())
             {
-                std::cout << iteratorI.value() << std::endl;
+                std::cout << nodeIteratorI.value() << std::endl;
             }
             else
             {
                 std::cout << std::endl;
-                printJsonFormatted(iteratorI.value(), indentLevel + 4);
+                printJsonFormatted(nodeIteratorI.value(), indentLevel + 4);
             }
         }
     }
     else if (node.is_array())
     {
-        for (nlohmann::json::const_iterator iteratorI = node.begin(); iteratorI != node.end(); iteratorI++)
+        for (nlohmann::json::const_iterator nodeIteratorI = node.begin(); nodeIteratorI != node.end(); nodeIteratorI++)
         {
-            if (iteratorI->is_primitive())
+            if (nodeIteratorI->is_primitive())
             {
-                std::cout << padding << "- " << *iteratorI << std::endl;
+                std::cout << padding << "- " << *nodeIteratorI << std::endl;
             }
             else
             {
                 std::cout << padding << "-" << std::endl;
-                printJsonFormatted(*iteratorI, indentLevel + 4);
+                printJsonFormatted(*nodeIteratorI, indentLevel + 4);
             }
         }
     }

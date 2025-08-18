@@ -28,7 +28,7 @@ CSVParser::ParseStatus CSVParser::parse(const std::string &filename)
         std::string line;
         std::string completeLine;
         bool inQuotes = false;
-        std::cout << "Parsed CSV :" << std::endl;
+        std::vector<std::vector<std::string>> parsedData;
 
         while (std::getline(file, line))
         {
@@ -48,16 +48,10 @@ CSVParser::ParseStatus CSVParser::parse(const std::string &filename)
             }
 
             std::vector<std::string> row = parseLine(completeLine);
-
-            for (int iteratorI = 0; iteratorI < row.size(); iteratorI++)
-            {
-                std::cout << "[" << row[iteratorI] << "] ";
-            }
-            std::cout << std::endl;
-
+            parsedData.push_back(row);
             completeLine = "";
         }
-
+        printParsedData(parsedData);
         return ParseStatus::Success;
     }
     catch (const std::exception &e)
@@ -70,9 +64,9 @@ CSVParser::ParseStatus CSVParser::parse(const std::string &filename)
 int CSVParser::countQuotes(const std::string &completeLine)
 {
     int quoteCount = 0;
-    for (int iteratorI = 0; iteratorI < completeLine.size(); iteratorI++)
+    for (int rowIteratorI = 0; rowIteratorI < completeLine.size(); rowIteratorI++)
     {
-        if (completeLine[iteratorI] == '"')
+        if (completeLine[rowIteratorI] == '"')
         {
             quoteCount++;
         }
@@ -86,16 +80,16 @@ std::vector<std::string> CSVParser::parseLine(const std::string &completeLine)
     std::string cell;
     bool insideQuotes = false;
 
-    for (int iteratorI = 0; iteratorI < completeLine.size(); iteratorI++)
+    for (int rowIteratorI = 0; rowIteratorI < completeLine.size(); rowIteratorI++)
     {
-        char character = completeLine[iteratorI];
+        char character = completeLine[rowIteratorI];
 
         if (character == '"')
         {
-            if (insideQuotes && iteratorI + 1 < completeLine.size() && completeLine[iteratorI + 1] == '"')
+            if (insideQuotes && rowIteratorI + 1 < completeLine.size() && completeLine[rowIteratorI + 1] == '"')
             {
                 cell += '"';
-                iteratorI++;
+                rowIteratorI++;
             }
             else
             {
@@ -114,4 +108,17 @@ std::vector<std::string> CSVParser::parseLine(const std::string &completeLine)
     }
     row.push_back(cell);
     return row;
+}
+
+void CSVParser::printParsedData(const std::vector<std::vector<std::string>> &data)
+{
+    std::cout<<"Parsed CSV : "<<std::endl;
+    for (std::vector<std::vector<std::string>>::const_iterator rowIteratorI = data.begin(); rowIteratorI != data.end(); rowIteratorI++)
+    {
+        for (std::vector<std::string>::const_iterator cellIteratorI = rowIteratorI->begin(); cellIteratorI != rowIteratorI->end(); cellIteratorI++)
+        {
+            std::cout << "[" << *cellIteratorI << "] ";
+        }
+        std::cout << std::endl;
+    }
 }

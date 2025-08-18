@@ -16,7 +16,7 @@ enum class FileType
 
 bool fileExists(const std::string &filename);
 
-void parseStatus(Parser::ParseStatus status);
+void parseStatus(IParser::ParseStatus status);
 
 int main()
 {
@@ -67,7 +67,7 @@ int main()
         return 1;
     }
 
-    Parser *parser = nullptr;
+    IParser *parser = nullptr;
 
     switch (fileType)
     {
@@ -88,7 +88,7 @@ int main()
         return 1;
     }
 
-    Parser::ParseStatus status = parser->parse(filename);
+    IParser::ParseStatus status = parser->parse(filename);
     parseStatus(status);
 
     delete parser;
@@ -101,34 +101,36 @@ bool fileExists(const std::string &filename)
     return file.is_open();
 }
 
-void parseStatus(Parser::ParseStatus status)
+void parseStatus(IParser::ParseStatus status)
 {
-    if (status == Parser::ParseStatus::Success)
+    switch (status)
     {
+    case IParser::ParseStatus::Success:
         std::cout << "Parsing completed successfully" << std::endl;
-    }
-    else if (status == Parser::ParseStatus::FileNotFound)
-    {
+        break;
+
+    case IParser::ParseStatus::FileNotFound:
         std::cout << "Error: File not found" << std::endl;
-    }
-    else if (status == Parser::ParseStatus::FileEmpty)
-    {
+        break;
+
+    case IParser::ParseStatus::FileEmpty:
         std::cout << "Error: File is empty" << std::endl;
-    }
-    else if (status == Parser::ParseStatus::ParseError)
-    {
+        break;
+
+    case IParser::ParseStatus::ParseError:
         std::cout << "Error: Parse error occurred" << std::endl;
-    }
-    else if (status == Parser::ParseStatus::ParseFailed)
-    {
+        break;
+
+    case IParser::ParseStatus::ParseFailed:
         std::cout << "Error: Parse failed" << std::endl;
-    }
-    else if (status == Parser::ParseStatus::InvalidRootType)
-    {
+        break;
+
+    case IParser::ParseStatus::InvalidRootType:
         std::cout << "Error: Invalid root type in file" << std::endl;
-    }
-    else
-    {
+        break;
+
+    default:
         std::cout << "Error: Unknown error occurred" << std::endl;
+        break;
     }
 }
