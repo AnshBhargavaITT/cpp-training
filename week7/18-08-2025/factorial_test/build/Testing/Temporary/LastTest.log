@@ -1,0 +1,32 @@
+Start testing: Aug 18 19:49 IST
+----------------------------------------------------------
+1/1 Testing: RunFactorialTests
+1/1 Test: RunFactorialTests
+Command: "/home/anshbhargava/Desktop/cpp-training/week7/18-08-2025/factorial_test/build/MyTests"
+Directory: /home/anshbhargava/Desktop/cpp-training/week7/18-08-2025/factorial_test/build
+"RunFactorialTests" start time: Aug 18 19:49 IST
+Output:
+----------------------------------------------------------
+[==========] Running 3 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 3 tests from FactorialTest
+[ RUN      ] FactorialTest.Zero
+[       OK ] FactorialTest.Zero (0 ms)
+[ RUN      ] FactorialTest.Positive
+[       OK ] FactorialTest.Positive (0 ms)
+[ RUN      ] FactorialTest.Negative
+[       OK ] FactorialTest.Negative (0 ms)
+[----------] 3 tests from FactorialTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 3 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 3 tests.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"RunFactorialTests" end time: Aug 18 19:49 IST
+"RunFactorialTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Aug 18 19:49 IST
