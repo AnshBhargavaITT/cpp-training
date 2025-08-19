@@ -4,25 +4,20 @@
 
 bool UserManager::addUser(User *user, const std::string &username, const std::string &password)
 {
-    std::unordered_map<std::string, Credential>::iterator iteratorI = credentials.find(username);
-
-    if (iteratorI != credentials.end())
+    for (Credential &cred : credentials)
     {
-        if (iteratorI->second.user->getUserId() != user->getUserId())
+        if (cred.username == username)
         {
-            std::cout << "User with username '" << username << "' already exists" << std::endl;
-            return false;
-        }
-        else
-        {
-            credentials[username] = Credential{username, password, user};
-            return true;
+            if (cred.user->getUserId() == user->getUserId())
+            {
+                return true;
+            }
         }
     }
 
-    for (int iteratorI = 0; iteratorI < users.size(); iteratorI++)
+    for (User *existingUser : users)
     {
-        if (users[iteratorI]->getUserId() == user->getUserId())
+        if (existingUser->getUserId() == user->getUserId())
         {
             std::cout << "User with ID " << user->getUserId() << " already exists" << std::endl;
             return false;
@@ -30,32 +25,43 @@ bool UserManager::addUser(User *user, const std::string &username, const std::st
     }
 
     users.push_back(user);
-    credentials[username] = Credential{username, password, user};
+    
+    Credential newCred;
+    newCred.username = username;
+    newCred.password = password;
+    newCred.user = user;
+    
+    credentials.push_back(newCred);
+
     return true;
 }
 
 bool UserManager::removeUser(int userId)
 {
-    for (int iteratorI = 0; iteratorI < users.size(); iteratorI++)
-    {
-        if (users[iteratorI]->getUserId() == userId)
-        {
-            for (std::unordered_map<std::string, Credential>::iterator iteratorI = credentials.begin(); iteratorI != credentials.end(); iteratorI++)
-            {
-                if (iteratorI->second.user->getUserId() == userId)
-                {
-                    credentials.erase(iteratorI);
-                    break;
-                }
-            }
+    bool removed = false;
 
-            delete users[iteratorI];
+    for (int iteratorI = 0; iteratorI < users.size(); iteratorI++) 
+    {
+        if (users[iteratorI] && users[iteratorI]->getUserId() == userId) 
+        {
             users.erase(users.begin() + iteratorI);
-            return true;
+            break;
         }
     }
-    return false;
+
+    for (int iteratorI = 0; iteratorI < credentials.size(); iteratorI++) 
+    {
+        if (credentials[iteratorI].user && credentials[iteratorI].user->getUserId() == userId) 
+        {
+            credentials.erase(credentials.begin() + iteratorI);
+            removed = true;
+            break;
+        }
+    }
+
+    return removed;
 }
+
 
 User *UserManager::getUserById(int userId) const
 {
@@ -68,20 +74,27 @@ User *UserManager::getUserById(int userId) const
     }
     return nullptr;
 }
+
 User *UserManager::getUserByUsername(const std::string &username) const
 {
-    if (credentials.count(username) > 0)
+    for (int iteratorI = 0; iteratorI < credentials.size(); iteratorI++) 
     {
-        return credentials.at(username).user;
+        if (credentials[iteratorI].username == username) 
+        {
+            return credentials[iteratorI].user;
+        }
     }
     return nullptr;
 }
 
 bool UserManager::verifyCredentials(const std::string &username, const std::string &password) const
 {
-    if (credentials.count(username) > 0)
+    for (int iteratorI = 0; iteratorI < credentials.size(); iteratorI++) 
     {
-        return credentials.at(username).password == password;
+        if (credentials[iteratorI].username == username && credentials[iteratorI].password == password) 
+        {
+            return true;
+        }
     }
     return false;
 }
@@ -90,12 +103,17 @@ const std::vector<User *> &UserManager::getAllUsers() const { return users; }
 
 Credential UserManager::getCredentialByUserId(int userId) const
 {
-    for (const std::pair<const std::string, Credential> &pair : credentials)
+    for (int iteratorI = 0; iteratorI < credentials.size(); iteratorI++) 
     {
-        if (pair.second.user->getUserId() == userId)
+        if (credentials[iteratorI].user && credentials[iteratorI].user->getUserId() == userId) 
         {
-            return pair.second;
+            return credentials[iteratorI];
         }
     }
-    return {"", "", nullptr};
+
+    Credential emptyCred;
+    emptyCred.username = "";
+    emptyCred.password = "";
+    emptyCred.user = nullptr;
+    return emptyCred;
 }

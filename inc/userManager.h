@@ -4,7 +4,6 @@
 #include "users.h"
 #include <vector>
 #include <string>
-#include <unordered_map>
 
 struct Credential
 {
@@ -16,7 +15,7 @@ struct Credential
 class UserManager
 {
     std::vector<User *> users;
-    std::unordered_map<std::string, Credential> credentials;
+    std::vector<Credential> credentials; 
 
 public:
     bool addUser(User *user, const std::string &username, const std::string &password);
