@@ -28,8 +28,7 @@ CSVParser::ParseStatus CSVParser::parse(const std::string &filename)
         std::string line;
         std::string completeLine;
         bool inQuotes = false;
-        std::vector<std::vector<std::string>> parsedData;
-
+        std::cout << "Parsed CSV :" << std::endl;
         while (std::getline(file, line))
         {
             if (!completeLine.empty())
@@ -48,10 +47,13 @@ CSVParser::ParseStatus CSVParser::parse(const std::string &filename)
             }
 
             std::vector<std::string> row = parseLine(completeLine);
-            parsedData.push_back(row);
+            for (int iteratorI = 0; iteratorI < row.size(); iteratorI++)
+            {
+                std::cout << "[" << row[iteratorI] << "] ";
+            }
+            std::cout << std::endl;
             completeLine = "";
         }
-        printParsedData(parsedData);
         return ParseStatus::Success;
     }
     catch (const std::exception &e)
@@ -110,15 +112,3 @@ std::vector<std::string> CSVParser::parseLine(const std::string &completeLine)
     return row;
 }
 
-void CSVParser::printParsedData(const std::vector<std::vector<std::string>> &data)
-{
-    std::cout<<"Parsed CSV : "<<std::endl;
-    for (std::vector<std::vector<std::string>>::const_iterator rowIteratorI = data.begin(); rowIteratorI != data.end(); rowIteratorI++)
-    {
-        for (std::vector<std::string>::const_iterator cellIteratorI = rowIteratorI->begin(); cellIteratorI != rowIteratorI->end(); cellIteratorI++)
-        {
-            std::cout << "[" << *cellIteratorI << "] ";
-        }
-        std::cout << std::endl;
-    }
-}

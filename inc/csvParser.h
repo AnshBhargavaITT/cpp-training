@@ -11,8 +11,6 @@ public:
 
 private:
     int countQuotes(const std::string &line);
-
-    void printParsedData(const std::vector<std::vector<std::string>> &data);
     
     std::vector<std::string> parseLine(const std::string &line);
 };
