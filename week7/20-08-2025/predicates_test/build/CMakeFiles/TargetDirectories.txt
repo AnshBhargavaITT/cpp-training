@@ -1,0 +1,4 @@
+/home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/predicates_test/build/CMakeFiles/MyTests.dir
+/home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/predicates_test/build/CMakeFiles/test.dir
+/home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/predicates_test/build/CMakeFiles/edit_cache.dir
+/home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/predicates_test/build/CMakeFiles/rebuild_cache.dir

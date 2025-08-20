@@ -1,0 +1,42 @@
+Start testing: Aug 20 12:48 IST
+----------------------------------------------------------
+1/1 Testing: RunAllTests
+1/1 Test: RunAllTests
+Command: "/home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/bank_test/build/BankTests"
+Directory: /home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/bank_test/build
+"RunAllTests" start time: Aug 20 12:48 IST
+Output:
+----------------------------------------------------------
+Running main() from ./googletest/src/gtest_main.cc
+[==========] Running 6 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 3 tests from AccountHolderTest
+[ RUN      ] AccountHolderTest.DepositIncreasesBalance
+[       OK ] AccountHolderTest.DepositIncreasesBalance (0 ms)
+[ RUN      ] AccountHolderTest.WithdrawDecreasesBalance
+[       OK ] AccountHolderTest.WithdrawDecreasesBalance (0 ms)
+[ RUN      ] AccountHolderTest.WithdrawFailsIfInsufficientFunds
+[       OK ] AccountHolderTest.WithdrawFailsIfInsufficientFunds (0 ms)
+[----------] 3 tests from AccountHolderTest (0 ms total)
+
+[----------] 3 tests from BankTest
+[ RUN      ] BankTest.TotalAssetsIsSumOfBalances
+[       OK ] BankTest.TotalAssetsIsSumOfBalances (0 ms)
+[ RUN      ] BankTest.FindAccountReturnsCorrectAccount
+[       OK ] BankTest.FindAccountReturnsCorrectAccount (0 ms)
+[ RUN      ] BankTest.FindAccountReturnsNullptrIfNotFound
+[       OK ] BankTest.FindAccountReturnsNullptrIfNotFound (0 ms)
+[----------] 3 tests from BankTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 6 tests from 2 test suites ran. (0 ms total)
+[  PASSED  ] 6 tests.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"RunAllTests" end time: Aug 20 12:48 IST
+"RunAllTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Aug 20 12:48 IST

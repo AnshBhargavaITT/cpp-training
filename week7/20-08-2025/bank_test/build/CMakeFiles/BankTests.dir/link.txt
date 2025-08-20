@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/BankTests.dir/test/accountHolderTest.cpp.o CMakeFiles/BankTests.dir/test/bankTest.cpp.o -o BankTests  libBankLib.a -lpthread /usr/lib/x86_64-linux-gnu/libgtest_main.a /usr/lib/x86_64-linux-gnu/libgtest.a 

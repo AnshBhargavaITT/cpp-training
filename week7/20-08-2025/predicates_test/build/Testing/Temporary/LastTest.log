@@ -1,0 +1,37 @@
+Start testing: Aug 20 12:33 IST
+----------------------------------------------------------
+1/1 Testing: RunPredictionTest
+1/1 Test: RunPredictionTest
+Command: "/home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/predicates_test/build/MyTests"
+Directory: /home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/predicates_test/build
+"RunPredictionTest" start time: Aug 20 12:33 IST
+Output:
+----------------------------------------------------------
+Running main() from ./googletest/src/gtest_main.cc
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ExpectPredicateTest
+[ RUN      ] ExpectPredicateTest.isAlmostEqual2
+/home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/predicates_test/predicate.cpp:33: Failure
+Value of: isAlmostEqual2(a,b)
+  Actual: false (a is 0, b is 100, difference is 100)
+Expected: true
+[  FAILED  ] ExpectPredicateTest.isAlmostEqual2 (0 ms)
+[----------] 1 test from ExpectPredicateTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 0 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] ExpectPredicateTest.isAlmostEqual2
+
+ 1 FAILED TEST
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Failed.
+"RunPredictionTest" end time: Aug 20 12:33 IST
+"RunPredictionTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Aug 20 12:33 IST
