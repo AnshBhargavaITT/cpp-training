@@ -1,0 +1,4 @@
+/home/anshbhargava/Desktop/cpp-training/week7/21-08-2025/atm_machine/build/CMakeFiles/RunAllTests.dir
+/home/anshbhargava/Desktop/cpp-training/week7/21-08-2025/atm_machine/build/CMakeFiles/test.dir
+/home/anshbhargava/Desktop/cpp-training/week7/21-08-2025/atm_machine/build/CMakeFiles/edit_cache.dir
+/home/anshbhargava/Desktop/cpp-training/week7/21-08-2025/atm_machine/build/CMakeFiles/rebuild_cache.dir

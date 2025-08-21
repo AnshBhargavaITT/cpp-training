@@ -1,0 +1,2 @@
+/usr/bin/ar qc libBankLib.a CMakeFiles/BankLib.dir/src/userService.cpp.o
+/usr/bin/ranlib libBankLib.a
