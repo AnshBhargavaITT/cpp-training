@@ -18,19 +18,19 @@ class UserManager
     std::vector<Credential> credentials; 
 
 public:
-    bool addUser(User *user, const std::string &username, const std::string &password);
+    virtual bool addUser(User *user, const std::string &username, const std::string &password);
 
-    bool removeUser(int userId);
+    virtual bool removeUser(int userId);
 
-    User *getUserById(int userId) const;
+    virtual User *getUserById(int userId) const;
 
-    User *getUserByUsername(const std::string &username) const;
+    virtual User *getUserByUsername(const std::string &username) const;
 
-    bool verifyCredentials(const std::string &username, const std::string &password) const;
+    virtual bool verifyCredentials(const std::string &username, const std::string &password) const;
 
-    const std::vector<User *> &getAllUsers() const;
+    virtual const std::vector<User *> &getAllUsers() const;
 
-    Credential getCredentialByUserId(int userId) const;
+    virtual Credential getCredentialByUserId(int userId) const;
 };
 
 #endif
