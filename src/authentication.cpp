@@ -6,7 +6,7 @@ Authentication::Authentication(UserManager *manager)
     currentUser = nullptr;
 }
 
-User *Authentication::login(const std::string &username, const std::string &password)
+IUser *Authentication::login(const std::string &username, const std::string &password)
 {
     if (userManager->verifyCredentials(username, password))
     {
@@ -26,4 +26,4 @@ bool Authentication::logout()
     return false;
 }
 
-User *Authentication::getCurrentUser() const { return currentUser; }
+IUser *Authentication::getCurrentUser() const { return currentUser; }

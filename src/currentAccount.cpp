@@ -3,6 +3,7 @@
 
 bool CurrentAccount::withdraw(double amount)
 {
+    if (amount <= 0) { return false; }
     balance -= amount;
     std::string currentDate = getCurrentDate();
     transactions.push_back(new Transaction(getAccountType(), -amount, currentDate));

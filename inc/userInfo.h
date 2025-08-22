@@ -2,16 +2,16 @@
 #define USERINFO_H
 
 #include <string>
-#include "enums.h"  
+#include "enums.h"
 
-struct UserInfo 
+struct UserInfo
 {
     int id;
     std::string name;
     Role role;
 };
 
-struct AccountHolderInfo : public UserInfo 
+struct AccountHolderInfo : public UserInfo
 {
     std::string email;
     std::string phoneNumber;

@@ -9,26 +9,26 @@ struct Credential
 {
     std::string username;
     std::string password;
-    User *user;
+    IUser *user;
 };
 
 class UserManager
 {
-    std::vector<User *> users;
-    std::vector<Credential> credentials; 
+    std::vector<IUser *> users;
+    std::vector<Credential> credentials;
 
 public:
-    virtual bool addUser(User *user, const std::string &username, const std::string &password);
+    virtual bool addUser(IUser *user, const std::string &username, const std::string &password);
 
     virtual bool removeUser(int userId);
 
-    virtual User *getUserById(int userId) const;
+    virtual IUser *getUserById(int userId) const;
 
-    virtual User *getUserByUsername(const std::string &username) const;
+    virtual IUser *getUserByUsername(const std::string &username) const;
 
     virtual bool verifyCredentials(const std::string &username, const std::string &password) const;
 
-    virtual const std::vector<User *> &getAllUsers() const;
+    virtual const std::vector<IUser *> &getAllUsers() const;
 
     virtual Credential getCredentialByUserId(int userId) const;
 };

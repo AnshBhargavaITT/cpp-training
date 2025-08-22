@@ -2,7 +2,7 @@
 #include <iostream>
 #include <unordered_map>
 
-bool UserManager::addUser(User *user, const std::string &username, const std::string &password)
+bool UserManager::addUser(IUser *user, const std::string &username, const std::string &password)
 {
     for (Credential &cred : credentials)
     {
@@ -15,7 +15,7 @@ bool UserManager::addUser(User *user, const std::string &username, const std::st
         }
     }
 
-    for (User *existingUser : users)
+    for (IUser *existingUser : users)
     {
         if (existingUser->getUserId() == user->getUserId())
         {
@@ -25,12 +25,12 @@ bool UserManager::addUser(User *user, const std::string &username, const std::st
     }
 
     users.push_back(user);
-    
+
     Credential newCred;
     newCred.username = username;
     newCred.password = password;
     newCred.user = user;
-    
+
     credentials.push_back(newCred);
 
     return true;
@@ -40,18 +40,18 @@ bool UserManager::removeUser(int userId)
 {
     bool removed = false;
 
-    for (int iteratorI = 0; iteratorI < users.size(); iteratorI++) 
+    for (int iteratorI = 0; iteratorI < users.size(); iteratorI++)
     {
-        if (users[iteratorI] && users[iteratorI]->getUserId() == userId) 
+        if (users[iteratorI] && users[iteratorI]->getUserId() == userId)
         {
             users.erase(users.begin() + iteratorI);
             break;
         }
     }
 
-    for (int iteratorI = 0; iteratorI < credentials.size(); iteratorI++) 
+    for (int iteratorI = 0; iteratorI < credentials.size(); iteratorI++)
     {
-        if (credentials[iteratorI].user && credentials[iteratorI].user->getUserId() == userId) 
+        if (credentials[iteratorI].user && credentials[iteratorI].user->getUserId() == userId)
         {
             credentials.erase(credentials.begin() + iteratorI);
             removed = true;
@@ -62,8 +62,7 @@ bool UserManager::removeUser(int userId)
     return removed;
 }
 
-
-User *UserManager::getUserById(int userId) const
+IUser *UserManager::getUserById(int userId) const
 {
     for (int iteratorI = 0; iteratorI < users.size(); iteratorI++)
     {
@@ -75,11 +74,11 @@ User *UserManager::getUserById(int userId) const
     return nullptr;
 }
 
-User *UserManager::getUserByUsername(const std::string &username) const
+IUser *UserManager::getUserByUsername(const std::string &username) const
 {
-    for (int iteratorI = 0; iteratorI < credentials.size(); iteratorI++) 
+    for (int iteratorI = 0; iteratorI < credentials.size(); iteratorI++)
     {
-        if (credentials[iteratorI].username == username) 
+        if (credentials[iteratorI].username == username)
         {
             return credentials[iteratorI].user;
         }
@@ -89,9 +88,9 @@ User *UserManager::getUserByUsername(const std::string &username) const
 
 bool UserManager::verifyCredentials(const std::string &username, const std::string &password) const
 {
-    for (int iteratorI = 0; iteratorI < credentials.size(); iteratorI++) 
+    for (int iteratorI = 0; iteratorI < credentials.size(); iteratorI++)
     {
-        if (credentials[iteratorI].username == username && credentials[iteratorI].password == password) 
+        if (credentials[iteratorI].username == username && credentials[iteratorI].password == password)
         {
             return true;
         }
@@ -99,13 +98,13 @@ bool UserManager::verifyCredentials(const std::string &username, const std::stri
     return false;
 }
 
-const std::vector<User *> &UserManager::getAllUsers() const { return users; }
+const std::vector<IUser *> &UserManager::getAllUsers() const { return users; }
 
 Credential UserManager::getCredentialByUserId(int userId) const
 {
-    for (int iteratorI = 0; iteratorI < credentials.size(); iteratorI++) 
+    for (int iteratorI = 0; iteratorI < credentials.size(); iteratorI++)
     {
-        if (credentials[iteratorI].user && credentials[iteratorI].user->getUserId() == userId) 
+        if (credentials[iteratorI].user && credentials[iteratorI].user->getUserId() == userId)
         {
             return credentials[iteratorI];
         }

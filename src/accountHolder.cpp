@@ -1,7 +1,7 @@
 #include "accountHolder.h"
 
 AccountHolder::AccountHolder(const AccountHolderInfo &info)
-    : User(info), email(info.email), phoneNumber(info.phoneNumber) {}
+    : IUser(info), email(info.email), phoneNumber(info.phoneNumber) {}
 
 bool AccountHolder::depositToAccount(int accountNumber, double amount)
 {

@@ -5,7 +5,7 @@
 #include "enums.h"
 #include "userInfo.h"
 
-class User
+class IUser
 {
 protected:
     int userId;
@@ -13,17 +13,17 @@ protected:
     Role role;
 
 public:
-    User(const UserInfo &info)
+    IUser(const UserInfo &info)
         : userId(info.id),
           name(info.name),
           role(info.role) {}
 
-    virtual ~User() {}
+    virtual ~IUser() {}
 
     virtual int getUserId() const = 0;
 
     virtual std::string getName() const = 0;
-    
+
     virtual Role getRole() const = 0;
 };
 

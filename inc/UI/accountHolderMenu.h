@@ -14,7 +14,7 @@ class AccountMenu
     void printTransactions(const std::vector<Transaction *> &transactions);
 
 public:
-    AccountMenu(Bank &bank, AccountHolder* holder);
+    AccountMenu(Bank &bank, AccountHolder *holder);
 
     void createAccount();
 

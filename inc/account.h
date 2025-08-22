@@ -25,11 +25,11 @@ public:
 
     virtual AccountType getAccountType() const = 0;
 
-    int getAccountNumber() const;
+    virtual int getAccountNumber() const;
 
-    double getBalance() const;
+    virtual double getBalance() const;
 
-    void setAccountNumber(int accountNumber);
+    virtual void setAccountNumber(int accountNumber);
 };
 
 #endif

@@ -7,7 +7,7 @@
 #include <vector>
 #include <string>
 
-class AccountHolder : public User
+class AccountHolder : public IUser
 {
     std::string email;
     std::string phoneNumber;

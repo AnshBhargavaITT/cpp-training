@@ -7,21 +7,20 @@
 #include "accountHolder.h"
 #include "admin.h"
 
-class UserMenu 
+class UserMenu
 {
-    Bank& bank;
-    Authentication& auth;
-    UserManager& userManager;
+    Bank &bank;
+    Authentication &auth;
+    UserManager &userManager;
 
 public:
+    UserMenu(Bank &bank, Authentication &auth, UserManager &userManager);
 
-    UserMenu(Bank& bank, Authentication& auth, UserManager& userManager);
+    void loginUser();
 
-    void loginUser(); 
+    void loginAdmin(Admin *admin);
 
-    void loginAdmin(Admin* admin);
-
-    void loginAccountHolder(AccountHolder* holder);
+    void loginAccountHolder(AccountHolder *holder);
 };
 
 #endif

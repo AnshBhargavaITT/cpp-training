@@ -3,7 +3,7 @@
 #include "userInfo.h"
 
 Admin::Admin(const UserInfo &info)
-    : User(info) {}
+    : IUser(info) {}
 
 int Admin::getUserId() const { return userId; }
 

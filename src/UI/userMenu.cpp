@@ -1,10 +1,10 @@
-#include<iostream>
+#include <iostream>
 #include "UI/userMenu.h"
 #include <utils.h>
 #include <UI/adminMenu.h>
 #include <UI/accountHolderMenu.h>
 
-UserMenu::UserMenu(Bank& bank, Authentication& auth, UserManager& userManager)
+UserMenu::UserMenu(Bank &bank, Authentication &auth, UserManager &userManager)
     : bank(bank), auth(auth), userManager(userManager) {}
 
 void UserMenu::loginUser()
@@ -15,7 +15,7 @@ void UserMenu::loginUser()
     std::cout << "Enter Password: " << std::endl;
     std::getline(std::cin, password);
 
-    User *user = auth.login(username, password);
+    IUser *user = auth.login(username, password);
 
     if (!user)
     {
@@ -43,7 +43,7 @@ void UserMenu::loginAdmin(Admin *admin)
         std::cout << "2. Remove User" << std::endl;
         std::cout << "3. Register User" << std::endl;
         std::cout << "4. Personal Bank Account" << std::endl;
-        std::cout << "5. Delete Specific Account" <<std::endl;
+        std::cout << "5. Delete Specific Account" << std::endl;
         std::cout << "6. View All Users Registered" << std::endl;
         std::cout << "7. Logout" << std::endl;
 
@@ -77,7 +77,7 @@ void UserMenu::loginAdmin(Admin *admin)
             break;
         }
 
-        case 5: 
+        case 5:
         {
             adminMenu.deleteSpecificAccount(admin);
             break;
@@ -88,7 +88,7 @@ void UserMenu::loginAdmin(Admin *admin)
             adminMenu.viewAllUsers();
             break;
         }
-        
+
         case 7:
             auth.logout();
             std::cout << "Logged out" << std::endl;
@@ -112,7 +112,7 @@ void UserMenu::loginAccountHolder(AccountHolder *holder)
         std::cout << "3. Withdraw" << std::endl;
         std::cout << "4. View Mini Statement" << std::endl;
         std::cout << "5. Show balance" << std::endl;
-        std::cout << "6. Show all Account Numbers"<<std::endl;
+        std::cout << "6. Show all Account Numbers" << std::endl;
         std::cout << "7. Logout" << std::endl;
 
         int choice;
@@ -163,4 +163,3 @@ void UserMenu::loginAccountHolder(AccountHolder *holder)
         }
     }
 }
-

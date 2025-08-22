@@ -8,16 +8,16 @@
 class Authentication
 {
     UserManager *userManager;
-    User *currentUser = nullptr;
+    IUser *currentUser = nullptr;
 
 public:
     Authentication(UserManager *manager);
 
-    User *login(const std::string &username, const std::string &password);
+    IUser *login(const std::string &username, const std::string &password);
 
     bool logout();
 
-    User *getCurrentUser() const;
+    IUser *getCurrentUser() const;
 
     UserManager *getUserManager() const { return userManager; }
 };

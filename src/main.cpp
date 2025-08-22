@@ -11,7 +11,7 @@ int main()
     UserManager userManager;
     Bank bank(&userManager);
     Authentication auth(&userManager);
-    UserMenu usermenu(bank,auth,userManager);
+    UserMenu usermenu(bank, auth, userManager);
     bank.registerAdmin("Ansh", "admin", "admin123");
     bool session = true;
     while (session)
@@ -39,4 +39,3 @@ int main()
     }
     return 0;
 }
-

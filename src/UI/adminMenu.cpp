@@ -286,14 +286,14 @@ void AdminMenu::viewAllAccount()
 
 void AdminMenu::viewAllUsers()
 {
-    const std::vector<User *> &users = userManager.getAllUsers();
+    const std::vector<IUser *> &users = userManager.getAllUsers();
     if (users.empty())
     {
         std::cout << "No users found" << std::endl;
         return;
     }
 
-    for (User *user : users)
+    for (IUser *user : users)
     {
         std::cout << "User ID: " << user->getUserId() << ", Name: " << user->getName() << ", Role: " << (user->getRole() == Role::ADMIN ? "Admin" : "Account Holder") << std::endl;
     }

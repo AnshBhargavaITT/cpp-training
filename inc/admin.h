@@ -5,7 +5,7 @@
 #include "accountHolder.h"
 #include "userInfo.h"
 
-class Admin : public User
+class Admin : public IUser
 {
     AccountHolder *accountHolderProfile = nullptr;
 

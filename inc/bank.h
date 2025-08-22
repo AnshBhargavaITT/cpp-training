@@ -30,7 +30,7 @@ public:
 
     bool closeAccount(int accountNumber);
 
-    std::vector<Account *> getAccountsByUser(User *user);
+    std::vector<Account *> getAccountsByUser(IUser *user);
 
     AccountHolder *getAccountHolderById(int userId);
 
@@ -38,11 +38,11 @@ public:
 
     bool removeAccount(int userId, int accountNumber);
 
-    int getUserIdByAccount(Account* account);
+    int getUserIdByAccount(Account *account);
 
-    User *getUser(int userId);
+    IUser *getUser(int userId);
 
-    const std::vector<Account *> &getAllAccounts() const;
+    std::vector<Account *> &getAllAccounts();
 };
 
 #endif
