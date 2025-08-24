@@ -18,6 +18,12 @@ bool fileExists(const std::string &filename);
 
 void parseStatus(IParser::ParseStatus status);
 
+void handleCSV(const std::string &filename);
+
+void handleJSON(const std::string &filename);
+
+void handleXML(const std::string &filename);
+
 int main()
 {
     std::string filename;
@@ -27,7 +33,7 @@ int main()
     std::cout << "1. JSON" << std::endl;
     std::cout << "2. CSV" << std::endl;
     std::cout << "3. XML" << std::endl;
-    std::cout << "Enter your choice : " << std::endl;
+    std::cout << "Enter your choice : " <<std::endl;
     std::cin >> choice;
     std::cin.ignore();
 
@@ -38,15 +44,12 @@ int main()
     case 1:
         fileType = FileType::JSON;
         break;
-
     case 2:
         fileType = FileType::CSV;
         break;
-
     case 3:
         fileType = FileType::XML;
         break;
-
     default:
         std::cout << "Invalid file type " << std::endl;
         return 1;
@@ -63,35 +66,26 @@ int main()
 
     if (!fileExists(filename))
     {
-        std::cout << "File does not exist : " << filename << std::endl;
+        std::cout << "File does not exist: " << filename << std::endl;
         return 1;
     }
-
-    IParser *parser = nullptr;
 
     switch (fileType)
     {
     case FileType::JSON:
-        parser = new JSONParser();
+        handleJSON(filename);
         break;
-
     case FileType::CSV:
-        parser = new CSVParser();
+        handleCSV(filename);
         break;
-
     case FileType::XML:
-        parser = new XMLParser();
+        handleXML(filename);
         break;
-
     default:
-        std::cout << "Failed to create parser" << std::endl;
+        std::cout << "Unknown file type" << std::endl;
         return 1;
     }
 
-    IParser::ParseStatus status = parser->parse(filename);
-    parseStatus(status);
-
-    delete parser;
     return 0;
 }
 
@@ -132,5 +126,58 @@ void parseStatus(IParser::ParseStatus status)
     default:
         std::cout << "Error: Unknown error occurred" << std::endl;
         break;
+    }
+}
+
+void handleCSV(const std::string &filename)
+{
+    CSVParser parser;
+    IParser::ParseStatus status = parser.parse(filename);
+    parseStatus(status);
+    if (status != IParser::ParseStatus::Success) { return; }
+
+    int totalRows = parser.getRowCount(); 
+    for (int rowIndex = 0; rowIndex < totalRows; rowIndex++)
+    {
+        std::string name = parser.getCell(rowIndex, "name");
+        std::string city = parser.getCell(rowIndex, "city");
+
+        std::cout << "Person: " << name << " | City: " << city << std::endl;
+    }
+}
+
+void handleJSON(const std::string &filename)
+{
+    JSONParser parser;
+    IParser::ParseStatus status = parser.parse(filename);
+    parseStatus(status);
+    if (status != IParser::ParseStatus::Success) { return; }
+
+    nlohmann::json people = parser.getParsedData("people");
+    if (people.is_array() && people.size() > 0)
+    {
+        std::cout << "First person's name: " << people[0]["name"] << std::endl;
+        std::cout << "First person's city: " << people[0]["details"]["address"]["city"] << std::endl;
+    }
+}
+
+void handleXML(const std::string &filename)
+{
+    XMLParser parser;
+    IParser::ParseStatus status = parser.parse(filename);
+    parseStatus(status);
+    if (status != IParser::ParseStatus::Success) { return; }
+
+    pugi::xml_node peopleNode = parser.getXmlDocument().child("people");
+
+    for (pugi::xml_node personNode = peopleNode.child("person"); personNode; personNode = personNode.next_sibling("person"))
+    {
+        pugi::xml_node nameNode = personNode.child("name");
+        pugi::xml_node cityNode = personNode.child("details").child("address").child("city");
+
+        std::string name = nameNode ? nameNode.child_value() : "No Name";
+        std::string city = cityNode ? cityNode.child_value() : "No City";
+
+        std::cout << "Person: " << name << " | City: " << city << std::endl;
     }
 }

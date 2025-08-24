@@ -30,6 +30,8 @@ JSONParser::ParseStatus JSONParser::parse(const std::string &filename)
             return ParseStatus::InvalidRootType;
         }
 
+        parsedData = json;  
+
         std::cout << "Parsed JSON:" << std::endl;
         printJsonFormatted(json, 0);
 
@@ -82,4 +84,18 @@ void JSONParser::printJsonFormatted(const nlohmann::json &node, int indentLevel)
             }
         }
     }
+}
+
+nlohmann::json JSONParser::getParsedData(const std::string &key) const
+{
+    if (parsedData.is_object() && parsedData.contains(key))
+    {
+        return parsedData.at(key);
+    }
+    return nullptr;
+}
+
+const nlohmann::json &JSONParser::getJson() const
+{
+    return parsedData;
 }

@@ -28,7 +28,14 @@ CSVParser::ParseStatus CSVParser::parse(const std::string &filename)
         std::string line;
         std::string completeLine;
         bool inQuotes = false;
+
+        headerRow.clear();
+        csvData.clear();
+
+        bool isFirstLine = true;
+
         std::cout << "Parsed CSV :" << std::endl;
+
         while (std::getline(file, line))
         {
             if (!completeLine.empty())
@@ -47,18 +54,30 @@ CSVParser::ParseStatus CSVParser::parse(const std::string &filename)
             }
 
             std::vector<std::string> row = parseLine(completeLine);
-            for (int iteratorI = 0; iteratorI < row.size(); iteratorI++)
+
+            if (isFirstLine)
+            {
+                headerRow = row;
+                isFirstLine = false;
+            }
+            else
+            {
+                csvData.push_back(row);
+            }
+
+            for (int iteratorI = 0; iteratorI < (int)row.size(); iteratorI++)
             {
                 std::cout << "[" << row[iteratorI] << "] ";
             }
             std::cout << std::endl;
+
             completeLine = "";
         }
         return ParseStatus::Success;
     }
     catch (const std::exception &e)
     {
-        std::cerr << "CSVParser Exception: " << e.what() << std::endl;
+        std::cout << "CSVParser Exception: " << e.what() << std::endl;
         return ParseStatus::UnknownError;
     }
 }
@@ -66,7 +85,7 @@ CSVParser::ParseStatus CSVParser::parse(const std::string &filename)
 int CSVParser::countQuotes(const std::string &completeLine)
 {
     int quoteCount = 0;
-    for (int rowIteratorI = 0; rowIteratorI < completeLine.size(); rowIteratorI++)
+    for (int rowIteratorI = 0; rowIteratorI < (int)completeLine.size(); rowIteratorI++)
     {
         if (completeLine[rowIteratorI] == '"')
         {
@@ -82,13 +101,13 @@ std::vector<std::string> CSVParser::parseLine(const std::string &completeLine)
     std::string cell;
     bool insideQuotes = false;
 
-    for (int rowIteratorI = 0; rowIteratorI < completeLine.size(); rowIteratorI++)
+    for (int rowIteratorI = 0; rowIteratorI < (int)completeLine.size(); rowIteratorI++)
     {
         char character = completeLine[rowIteratorI];
 
         if (character == '"')
         {
-            if (insideQuotes && rowIteratorI + 1 < completeLine.size() && completeLine[rowIteratorI + 1] == '"')
+            if (insideQuotes && rowIteratorI + 1 < (int)completeLine.size() && completeLine[rowIteratorI + 1] == '"')
             {
                 cell += '"';
                 rowIteratorI++;
@@ -112,3 +131,40 @@ std::vector<std::string> CSVParser::parseLine(const std::string &completeLine)
     return row;
 }
 
+std::string CSVParser::getCell(int rowIndex, const std::string &columnName) const
+{
+    int colIndex = -1;
+    for (int iteratorI = 0; iteratorI < (int)headerRow.size(); iteratorI++)
+    {
+        if (headerRow[iteratorI] == columnName)
+        {
+            colIndex = iteratorI;
+            break;
+        }
+    }
+
+    if (colIndex == -1)
+    {
+        std::cout << "Column name not found: " << columnName << std::endl;
+        return "";
+    }
+
+    if (rowIndex < 0 || rowIndex >= (int)csvData.size())
+    {
+        std::cout << "Row index out of range: " << rowIndex << std::endl;
+        return "";
+    }
+
+    if (colIndex >= (int)csvData[rowIndex].size())
+    {
+        std::cout << "Column index out of range in row data." << std::endl;
+        return "";
+    }
+
+    return csvData[rowIndex][colIndex];
+}
+
+int CSVParser::getRowCount() const
+{
+    return (int)csvData.size();
+}

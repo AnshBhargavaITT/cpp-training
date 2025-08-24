@@ -1,7 +1,6 @@
 #include "xmlParser.h"
 #include <iostream>
 #include <fstream>
-#include <pugixml.hpp>
 
 XMLParser::ParseStatus XMLParser::parse(const std::string &filename)
 {
@@ -23,8 +22,7 @@ XMLParser::ParseStatus XMLParser::parse(const std::string &filename)
 
         file.seekg(0, std::ios::beg);
 
-        pugi::xml_document document;
-        pugi::xml_parse_result result = document.load(file);
+        pugi::xml_parse_result result = xmlDocument.load(file);
 
         file.close();
 
@@ -35,7 +33,7 @@ XMLParser::ParseStatus XMLParser::parse(const std::string &filename)
         }
 
         std::cout << "Parsed XML:" << std::endl;
-        printXmlNode(document.document_element(), 0);
+        printXmlNode(xmlDocument.document_element(), 0);
 
         return ParseStatus::Success;
     }
@@ -75,4 +73,14 @@ void XMLParser::printXmlNode(const pugi::xml_node &node, int indentLevel)
         }
         childNode = childNode.next_sibling();
     }
+}
+
+const pugi::xml_document& XMLParser::getXmlDocument() const
+{
+    return xmlDocument;
+}
+
+pugi::xml_node XMLParser::getNode(const std::string &xpath) const
+{
+    return xmlDocument.select_node(xpath.c_str()).node();
 }
