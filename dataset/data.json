@@ -1,0 +1,46 @@
+{
+  "people": [
+    {
+      "name": "Ansh",
+      "age": 23,
+      "hobbies": ["reading", "hiking", "painting"],
+      "details": {
+        "married": false,
+        "children": null,
+        "address": {
+          "street": "Silk Board",
+          "city": "Bengaluru",
+          "zip": "560029"
+        }
+      }
+    },
+    {
+      "name": "Sumit",
+      "age": 27,
+      "hobbies": ["biking", "cycling"],
+      "details": {
+        "married": true,
+        "children": ["Charlie", "Laila"],
+        "address": {
+          "street": "Begur",
+          "city": "Bengaluru",
+          "zip": "560068"
+        }
+      }
+    },
+    {
+      "name": "Yash",
+      "age": 24,
+      "hobbies": ["writing", "gaming", "cooking"],
+      "details": {
+        "married": false,
+        "children": null,
+        "address": {
+          "street": "Spice Garden",
+          "city": "Bengaluru",
+          "zip": "560012"
+        }
+      }
+    }
+  ]
+}

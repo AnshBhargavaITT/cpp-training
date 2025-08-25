@@ -1,0 +1,50 @@
+<people>
+  <person>
+    <name>Ansh</name>
+    <age>23</age>
+    <hobbies>
+      <hobby>reading</hobby>
+      <hobby>hiking</hobby>
+      <hobby>painting</hobby>
+    </hobbies>
+    <details married="false" children="null">
+      <address>
+        <street>Silk Board</street>
+        <city>Bengaluru</city>
+        <zip>560029</zip>
+      </address>
+    </details>
+  </person>
+  <person>
+    <name>Sumit</name>
+    <age>27</age>
+    <hobbies>
+      <hobby>biking</hobby>
+      <hobby>cycling</hobby>
+    </hobbies>
+    <details married="true" children="Charlie, Laila">
+      <address>
+        <street>Begur</street>
+        <city>Bengaluru</city>
+        <zip>560068</zip>
+      </address>
+    </details>
+  </person>
+  <person>
+    <name>Yash</name>
+    <age>24</age>
+    <hobbies>
+      <hobby>writing</hobby>
+      <hobby>gaming</hobby>
+      <hobby>cooking</hobby>
+    </hobbies>
+    <details married="false" children="null">
+      <address>
+        <street>Spice Garden</street>
+        <city>Bengaluru</city>
+        <!-- Comment -->
+        <zip>560012</zip>
+      </address>
+    </details>
+  </person>
+</people>
