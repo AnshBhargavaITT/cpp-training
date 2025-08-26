@@ -21,27 +21,27 @@ protected:
     }
 };
 
-TEST_F(AdminTest, GetUserId)
+TEST_F(AdminTest, WhenGetUserId_ThenReturnId)
 {
     EXPECT_EQ(admin->getUserId(), 11012);
 }
 
-TEST_F(AdminTest, GetName)
+TEST_F(AdminTest, WhenGetName_ThenReturnName)
 {
     EXPECT_EQ(admin->getName(), "Ansh");
 }
 
-TEST_F(AdminTest, GetRole)
+TEST_F(AdminTest, WhenGetRole_ThenReturnAdminRole)
 {
     EXPECT_EQ(admin->getRole(), Role::ADMIN);
 }
 
-TEST_F(AdminTest, HasBankAccount)
+TEST_F(AdminTest, WhenCheckingHasBankAccountInitially_ThenReturnFalse)
 {
     EXPECT_FALSE(admin->hasBankAccount());
 }
 
-TEST_F(AdminTest, SetAndGetAccountHolderProfile)
+TEST_F(AdminTest, WhenSetAccountHolderProfile_ThenHasBankAccountReturnsTrue)
 {
     AccountHolderInfo accountHolderProfile;
     accountHolderProfile.id = 11012;
@@ -50,13 +50,9 @@ TEST_F(AdminTest, SetAndGetAccountHolderProfile)
     accountHolderProfile.email = "ansh06@mail.com";
     accountHolderProfile.phoneNumber = "9087654321";
 
-    AccountHolder *accountHolder = new AccountHolder(accountHolderProfile);
-
-    admin->setAccountHolderProfile(accountHolder);
+    AccountHolder accountHolder(accountHolderProfile);
+    admin->setAccountHolderProfile(&accountHolder);
 
     EXPECT_TRUE(admin->hasBankAccount());
-
-    EXPECT_EQ(admin->getAccountHolderProfile(), accountHolder);
-
-    delete accountHolder;
+    EXPECT_EQ(admin->getAccountHolderProfile(), &accountHolder);
 }

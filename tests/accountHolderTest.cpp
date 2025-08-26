@@ -9,147 +9,121 @@ using ::testing::Return;
 class AccountHolderTest : public ::testing::Test
 {
 protected:
-    AccountHolder *accountHolder;
-    std::vector<MockAccount *> account;
+    AccountHolder accountHolder;
+    MockAccount mockAccount;
+    int accountNumber = 987654321;
+
+    AccountHolderTest()
+        : accountHolder(AccountHolderInfo{12345, "Ansh Bhargava", Role::ACCOUNT_HOLDER, "ansh@gmail.com", "9087654321"}) {}
 
     void SetUp() override
     {
-        AccountHolderInfo info;
-        info.name = "Ansh Bhargava";
-        info.email = "ansh@gmail.com";
-        info.phoneNumber = "9087654321";
-        info.role = Role::ACCOUNT_HOLDER;
-        accountHolder = new AccountHolder(info);
-    }
+        mockAccount.setAccountNumber(accountNumber);
 
-    void TearDown() override
-    {
-        delete accountHolder;
-
-        for (int iteratorI = 0; iteratorI < account.size(); iteratorI++)
-        {
-            delete account[iteratorI];
-        }
-        account.clear();
-    }
-
-    MockAccount *createMockAccount(int accountNumber)
-    {
-        MockAccount *mockAccount = new MockAccount();
-        mockAccount->setAccountNumber(accountNumber);
-        account.push_back(mockAccount);
-        return mockAccount;
+        EXPECT_CALL(mockAccount, getAccountNumber()).WillRepeatedly(Return(accountNumber));
     }
 };
 
-TEST_F(AccountHolderTest, DepositToAccount)
+TEST_F(AccountHolderTest, WhenDepositToExistingAccount_ThenReturnTrue)
 {
-    MockAccount *mockAccount = createMockAccount(987654321);
+    EXPECT_CALL(mockAccount, deposit(500.0)).Times(1).WillOnce(Return(true));
 
-    EXPECT_CALL(*mockAccount, getAccountNumber()).WillRepeatedly(Return(987654321));
+    accountHolder.addAccount(&mockAccount);
 
-    EXPECT_CALL(*mockAccount, deposit(500.0)).Times(1).WillOnce(Return(true));
-
-    accountHolder->addAccount(mockAccount);
-
-    bool result = accountHolder->depositToAccount(987654321, 500.0);
+    bool result = accountHolder.depositToAccount(accountNumber, 500.0);
     EXPECT_TRUE(result);
 }
 
-TEST_F(AccountHolderTest, WithdrawFromAccount)
+TEST_F(AccountHolderTest, WhenWithdrawFromExistingAccount_ThenReturnTrue)
 {
-    MockAccount *mockAccount = createMockAccount(987654345);
+    EXPECT_CALL(mockAccount, withdraw(200.0)).Times(1).WillOnce(Return(true));
 
-    EXPECT_CALL(*mockAccount, getAccountNumber()).WillRepeatedly(Return(987654345));
+    accountHolder.addAccount(&mockAccount);
 
-    EXPECT_CALL(*mockAccount, withdraw(200.0)).Times(1).WillOnce(Return(true));
-
-    accountHolder->addAccount(mockAccount);
-
-    bool result = accountHolder->withdrawFromAccount(987654345, 200.0);
+    bool result = accountHolder.withdrawFromAccount(accountNumber, 200.0);
     EXPECT_TRUE(result);
 }
 
-TEST_F(AccountHolderTest, GetMiniStatement)
+TEST_F(AccountHolderTest, WhenGetMiniStatementFromExistingAccount_ThenReturnTransactionList)
 {
-    MockAccount *mockAccount = createMockAccount(987657651);
     std::vector<Transaction *> transactions;
 
-    EXPECT_CALL(*mockAccount, getAccountNumber()).WillRepeatedly(Return(987657651));
+    EXPECT_CALL(mockAccount, bankStatement()).Times(1).WillOnce(Return(transactions));
 
-    EXPECT_CALL(*mockAccount, bankStatement()).Times(1).WillOnce(Return(transactions));
+    accountHolder.addAccount(&mockAccount);
 
-    accountHolder->addAccount(mockAccount);
-
-    std::vector<Transaction *> result = accountHolder->getMiniStatement(987657651);
+    std::vector<Transaction *> result = accountHolder.getMiniStatement(accountNumber);
     EXPECT_EQ(result.size(), 0);
 }
 
-TEST_F(AccountHolderTest, DeleteAccount)
+TEST_F(AccountHolderTest, WhenDeleteExistingAccount_ThenReturnTrue)
 {
-    MockAccount *mockAccount = createMockAccount(998877661);
+    accountHolder.addAccount(&mockAccount);
 
-    EXPECT_CALL(*mockAccount, getAccountNumber()).WillRepeatedly(Return(998877661));
-
-    accountHolder->addAccount(mockAccount);
-
-    EXPECT_TRUE(accountHolder->deleteAccount(998877661));
-
-    EXPECT_FALSE(accountHolder->deleteAccount(998877661));
+    EXPECT_TRUE(accountHolder.deleteAccount(accountNumber));
 }
 
-TEST_F(AccountHolderTest, GetAccountNumbers)
+TEST_F(AccountHolderTest, WhenDeleteAlreadyDeletedAccount_ThenReturnFalse)
 {
-    MockAccount *mockAccount1 = createMockAccount(901234567);
+    accountHolder.addAccount(&mockAccount);
+    accountHolder.deleteAccount(accountNumber);
 
-    MockAccount *mockAccount2 = createMockAccount(991209765);
+    EXPECT_FALSE(accountHolder.deleteAccount(accountNumber));
+}
 
-    EXPECT_CALL(*mockAccount1, getAccountNumber()).WillRepeatedly(Return(901234567));
-    EXPECT_CALL(*mockAccount2, getAccountNumber()).WillRepeatedly(Return(991209765));
+TEST_F(AccountHolderTest, WhenGetAccountNumbers_ThenReturnAllAccountNumbers)
+{
+    MockAccount mockAccount2;
+    int secondAccountNumber = 991209765;
+    mockAccount2.setAccountNumber(secondAccountNumber);
 
-    accountHolder->addAccount(mockAccount1);
-    accountHolder->addAccount(mockAccount2);
+    EXPECT_CALL(mockAccount2, getAccountNumber()).WillRepeatedly(Return(secondAccountNumber));
 
-    std::vector<int> accounts = accountHolder->getAccountNumbers();
+    accountHolder.addAccount(&mockAccount);
+    accountHolder.addAccount(&mockAccount2);
+
+    std::vector<int> accounts = accountHolder.getAccountNumbers();
 
     ASSERT_EQ(accounts.size(), 2);
-    EXPECT_EQ(accounts[0], 901234567);
-    EXPECT_EQ(accounts[1], 991209765);
+
+    EXPECT_EQ(accounts[0], accountNumber);
+
+    EXPECT_EQ(accounts[1], secondAccountNumber);
 }
 
-TEST_F(AccountHolderTest, DepositToNotExistentAccount)
+TEST_F(AccountHolderTest, WhenDepositToNonExistingAccount_ThenReturnFalse)
 {
-    bool result = accountHolder->depositToAccount(123451235, 100.0);
+    bool result = accountHolder.depositToAccount(accountNumber, 100.0);
     EXPECT_FALSE(result);
 }
 
-TEST_F(AccountHolderTest, WithdrawFromNotExistentAccount)
+TEST_F(AccountHolderTest, WhenWithdrawFromNonExistingAccount_ThenReturnFalse)
 {
-    bool result = accountHolder->withdrawFromAccount(123451235, 50.0);
+    bool result = accountHolder.withdrawFromAccount(accountNumber, 50.0);
     EXPECT_FALSE(result);
 }
 
-TEST_F(AccountHolderTest, GetMiniStatementFromNotExistentAccount)
+TEST_F(AccountHolderTest, WhenGetMiniStatementFromNonExistingAccount_ThenReturnEmptyList)
 {
-    std::vector<Transaction *> result = accountHolder->getMiniStatement(123451235);
+    std::vector<Transaction *> result = accountHolder.getMiniStatement(accountNumber);
     EXPECT_TRUE(result.empty());
 }
 
-TEST_F(AccountHolderTest, GetAccountDetailsByAccountNumber)
+TEST_F(AccountHolderTest, WhenGetAccountDetailsByValidAccountNumber_ThenReturnAccount)
 {
-    MockAccount *account = createMockAccount(123456789);
-    EXPECT_CALL(*account, getAccountNumber()).WillRepeatedly(Return(123456789));
+    accountHolder.addAccount(&mockAccount);
 
-    accountHolder->addAccount(account);
-
-    Account *result = accountHolder->getAccountDetailsByAccountNumber(123456789);
-    EXPECT_EQ(result, account);
+    Account *result = accountHolder.getAccountDetailsByAccountNumber(accountNumber);
+    EXPECT_EQ(result, &mockAccount);
 }
 
-TEST_F(AccountHolderTest, GetAccountHolderDetails)
+TEST_F(AccountHolderTest, WhenGetAccountHolderDetails_ThenReturnInfo)
 {
-    EXPECT_EQ(accountHolder->getEmail(), "ansh@gmail.com");
-    EXPECT_EQ(accountHolder->getPhoneNumber(), "9087654321");
-    EXPECT_EQ(accountHolder->getName(), "Ansh Bhargava");
-    EXPECT_EQ(accountHolder->getRole(), Role::ACCOUNT_HOLDER);
+    EXPECT_EQ(accountHolder.getEmail(), "ansh@gmail.com");
+
+    EXPECT_EQ(accountHolder.getPhoneNumber(), "9087654321");
+
+    EXPECT_EQ(accountHolder.getName(), "Ansh Bhargava");
+
+    EXPECT_EQ(accountHolder.getRole(), Role::ACCOUNT_HOLDER);
 }

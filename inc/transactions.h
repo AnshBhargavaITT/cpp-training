@@ -13,6 +13,8 @@ class Transaction
 public:
     Transaction(AccountType type, double amount, const std::string &date);
 
+    double getAmount() const ;
+
     std::string getTransactionDetail() const;
 };
 

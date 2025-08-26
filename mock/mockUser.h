@@ -6,8 +6,8 @@
 class MockUser : public IUser
 {
 public:
-    MockUser(const UserInfo &info) : IUser(info) {}
-
+    MockUser() : IUser() {}
+    
     MOCK_METHOD(int, getUserId, (), (const, override));
 
     MOCK_METHOD(std::string, getName, (), (const, override));

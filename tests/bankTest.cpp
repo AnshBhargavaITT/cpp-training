@@ -15,28 +15,25 @@ class BankTest : public ::testing::Test
 {
 protected:
     MockUserManager mockUserManager;
-    Bank *bank;
+    Bank bank;
+
     std::vector<IUser *> users;
 
     AccountHolder existingAccountHolder{AccountHolderInfo{12345, "Yash Singh", Role::ACCOUNT_HOLDER, "yash@gmail.com", "9876543210"}};
 
     Admin existingAdmin{UserInfo{54321, "Arpit Jain", Role::ADMIN}};
 
+    BankTest() : bank(&mockUserManager) {}
+
     void SetUp() override
     {
-        bank = new Bank(&mockUserManager);
         users.clear();
         users.push_back(&existingAccountHolder);
         users.push_back(&existingAdmin);
     }
-
-    void TearDown() override
-    {
-        delete bank;
-    }
 };
 
-TEST_F(BankTest, RegisterAccountHolder)
+TEST_F(BankTest, WhenRegisterAccountHolderWithValidDetails_ThenReturnValidAccountHolder)
 {
     std::string name = "Ansh Bhargava";
     std::string username = "ansh@981";
@@ -48,30 +45,27 @@ TEST_F(BankTest, RegisterAccountHolder)
 
     EXPECT_CALL(mockUserManager, addUser(_, username, password)).WillOnce(Return(true));
 
-    AccountHolder *holder = bank->registerAccountHolder(name, email, phone, username, password, -1);
+    AccountHolder *holder = bank.registerAccountHolder(name, email, phone, username, password, -1);
 
     ASSERT_NE(holder, nullptr);
 
     EXPECT_EQ(holder->getName(), name);
 }
 
-TEST_F(BankTest, InvalidPhoneNumberWhileRegisteringAccountHolder)
+TEST_F(BankTest, WhenRegisterAccountHolderWithInvalidPhoneNumber_ThenReturnNull)
 {
-    AccountHolder *holder = bank->registerAccountHolder("Sumit Kumar", "sumit@gmail.com", "812345678", "sumit", "sumit@3456", -1);
-
+    AccountHolder *holder = bank.registerAccountHolder("Sumit Kumar", "sumit@gmail.com", "812345678", "sumit", "sumit@3456", -1);
     EXPECT_EQ(holder, nullptr);
 }
 
-TEST_F(BankTest, DuplicateUsernameWhileRegisteringAccountHolder)
+TEST_F(BankTest, WhenRegisterAccountHolderWithDuplicateUsername_ThenReturnNull)
 {
     EXPECT_CALL(mockUserManager, getUserByUsername("yash")).WillOnce(Return(&existingAccountHolder));
-
-    AccountHolder *holder = bank->registerAccountHolder("Yash Singh", "yash@gmail.com", "9876543210", "yash", "yash@9837", -1);
-
+    AccountHolder *holder = bank.registerAccountHolder("Yash Singh", "yash@gmail.com", "9876543210", "yash", "yash@9837", -1);
     EXPECT_EQ(holder, nullptr);
 }
 
-TEST_F(BankTest, RegisterAdmin)
+TEST_F(BankTest, WhenRegisterAdminWithValidDetails_ThenReturnAdmin)
 {
     std::string name = "Vansh Gupta";
     std::string username = "vansh";
@@ -81,27 +75,27 @@ TEST_F(BankTest, RegisterAdmin)
 
     EXPECT_CALL(mockUserManager, addUser(_, username, password)).WillOnce(Return(true));
 
-    Admin *admin = bank->registerAdmin(name, username, password);
+    Admin *admin = bank.registerAdmin(name, username, password);
+
     ASSERT_NE(admin, nullptr);
+
     EXPECT_EQ(admin->getName(), name);
 }
 
-TEST_F(BankTest, InvalidPasswordWhileRegisteringAdmin)
+TEST_F(BankTest, WhenRegisterAdminWithInvalidPassword_ThenReturnNull)
 {
-    Admin *admin = bank->registerAdmin("Dheeraj Sharma", "dheeraj", "123");
-
+    Admin *admin = bank.registerAdmin("Dheeraj Sharma", "dheeraj", "123");
     EXPECT_EQ(admin, nullptr);
 }
 
-TEST_F(BankTest, DuplicateUsernameWhileRegisteringAdmin)
+TEST_F(BankTest, WhenRegisterAdminWithDuplicateUsername_ThenReturnNull)
 {
     EXPECT_CALL(mockUserManager, getUserByUsername("arpit")).WillOnce(Return(&existingAdmin));
-
-    Admin *admin = bank->registerAdmin("Arpit Jain", "arpit", "arpit@7890");
+    Admin *admin = bank.registerAdmin("Arpit Jain", "arpit", "arpit@7890");
     EXPECT_EQ(admin, nullptr);
 }
 
-TEST_F(BankTest, CreateAccount)
+TEST_F(BankTest, WhenCreateCurrentAndSavingAccountForRegisteredAccountHolder_ThenReturnAccounts)
 {
     std::string name = "Ansh Bhargava";
     std::string username = "ansh@987";
@@ -113,36 +107,41 @@ TEST_F(BankTest, CreateAccount)
 
     EXPECT_CALL(mockUserManager, addUser(_, username, password)).WillOnce(Return(true));
 
-    AccountHolder *holder = bank->registerAccountHolder(name, email, phone, username, password, -1);
-
+    AccountHolder *holder = bank.registerAccountHolder(name, email, phone, username, password, -1);
     ASSERT_NE(holder, nullptr);
 
-    Account *currentAccount = bank->createAccount(holder, AccountType::CURRENT_ACCOUNT);
-    EXPECT_NE(currentAccount, nullptr);
+    Account *currentAccount = bank.createAccount(holder, AccountType::CURRENT_ACCOUNT);
+
+    ASSERT_NE(currentAccount, nullptr);
+
     EXPECT_EQ(currentAccount->getAccountType(), AccountType::CURRENT_ACCOUNT);
 
-    Account *savingAccount = bank->createAccount(holder, AccountType::SAVING_ACCOUNT);
-    EXPECT_NE(savingAccount, nullptr);
+    Account *savingAccount = bank.createAccount(holder, AccountType::SAVING_ACCOUNT);
+
+    ASSERT_NE(savingAccount, nullptr);
+
     EXPECT_EQ(savingAccount->getAccountType(), AccountType::SAVING_ACCOUNT);
 }
 
-TEST_F(BankTest, CloseAccount)
+TEST_F(BankTest, WhenCloseCurrentAccountOfAccountHolder_ThenReturnTrue)
 {
-    AccountHolder *holder = new AccountHolder(AccountHolderInfo{10001, "Sumit Kumar", Role::ACCOUNT_HOLDER, "sumit@gmail.com", "9876543210"});
-    Account *account = new CurrentAccount();
-    account->setAccountNumber(123456789);
-    holder->addAccount(account);
+    AccountHolder holderForAccountClose{AccountHolderInfo{10001, "Sumit Kumar", Role::ACCOUNT_HOLDER, "sumit@gmail.com", "9876543210"}};
 
-    users.push_back(holder);
-    bank->getAllAccounts().push_back(account);
+    Account *currentAccount = bank.createAccount(&holderForAccountClose, AccountType::CURRENT_ACCOUNT);
+
+    ASSERT_NE(currentAccount, nullptr);
+
+    currentAccount->setAccountNumber(123456789);
+
+    users.push_back(&holderForAccountClose);
 
     EXPECT_CALL(mockUserManager, getAllUsers()).WillRepeatedly(ReturnRef(users));
-    EXPECT_TRUE(bank->closeAccount(123456789));
-    users.pop_back();
-    delete holder;
-}
 
-TEST_F(BankTest, GetAccountsByUser)
+    EXPECT_TRUE(bank.closeAccount(123456789));
+
+    users.pop_back();
+}
+TEST_F(BankTest, WhenGetAccountsByRegisteredUser_ThenReturnAllAccounts)
 {
     std::string name = "Yash Singh";
     std::string username = "yash2";
@@ -154,88 +153,90 @@ TEST_F(BankTest, GetAccountsByUser)
 
     EXPECT_CALL(mockUserManager, addUser(_, username, password)).WillOnce(Return(true));
 
-    AccountHolder *holder = bank->registerAccountHolder(name, email, phone, username, password, -1);
+    AccountHolder *holder = bank.registerAccountHolder(name, email, phone, username, password, -1);
+
     ASSERT_NE(holder, nullptr);
 
-    bank->createAccount(holder, AccountType::CURRENT_ACCOUNT);
-    bank->createAccount(holder, AccountType::SAVING_ACCOUNT);
+    bank.createAccount(holder, AccountType::CURRENT_ACCOUNT);
 
-    std::vector<Account *> accounts = bank->getAccountsByUser(holder);
+    bank.createAccount(holder, AccountType::SAVING_ACCOUNT);
+
+    std::vector<Account *> accounts = bank.getAccountsByUser(holder);
     EXPECT_EQ(accounts.size(), 2);
 }
 
-TEST_F(BankTest, RemoveUser)
+TEST_F(BankTest, WhenRemoveUserWithValidUserId_ThenReturnTrue)
 {
-    AccountHolder *holder = new AccountHolder(AccountHolderInfo{10002, "Vansh Gupta", Role::ACCOUNT_HOLDER, "vansh@gmail.com", "9876543210"});
-    Account *account = bank->createAccount(holder, AccountType::CURRENT_ACCOUNT);
-    holder->addAccount(account);
+    AccountHolder holder{AccountHolderInfo{10002, "Vansh Gupta", Role::ACCOUNT_HOLDER, "vansh@gmail.com", "9876543210"}};
+    Account *account = bank.createAccount(&holder, AccountType::CURRENT_ACCOUNT);
+    holder.addAccount(account);
 
-    users.push_back(holder);
+    users.push_back(&holder);
 
-    EXPECT_CALL(mockUserManager, getUserById(10002)).WillOnce(Return(holder));
+    EXPECT_CALL(mockUserManager, getUserById(10002)).WillOnce(Return(&holder));
 
     EXPECT_CALL(mockUserManager, getAllUsers()).WillRepeatedly(ReturnRef(users));
 
     EXPECT_CALL(mockUserManager, removeUser(10002)).WillOnce(Return(true));
 
-    EXPECT_TRUE(bank->removeUser(10002, 99999));
+    EXPECT_TRUE(bank.removeUser(10002, 99999));
 
     users.pop_back();
 }
 
-TEST_F(BankTest, RemoveAdminWithAccountHolderProfile)
+TEST_F(BankTest, WhenRemoveUserWithAdminHavingAccountHolderProfile_ThenReturnTrue)
 {
-    Admin *admin = new Admin(UserInfo{88888, "Sumit Kumar", Role::ADMIN});
-    users.push_back(admin);
+    Admin admin{UserInfo{88888, "Sumit Kumar", Role::ADMIN}};
+    users.push_back(&admin);
 
-    AccountHolder *holder = new AccountHolder(
-        AccountHolderInfo{88888, "Sumit Kumar", Role::ACCOUNT_HOLDER, "sumit@gmail.com", "9876543210"});
+    AccountHolder holder{
+        AccountHolderInfo{88888, "Sumit Kumar", Role::ACCOUNT_HOLDER, "sumit@gmail.com", "9876543210"}};
 
-    Account *account = bank->createAccount(holder, AccountType::SAVING_ACCOUNT);
+    Account *account = bank.createAccount(&holder, AccountType::SAVING_ACCOUNT);
     account->setAccountNumber(123789456);
-    holder->addAccount(account);
+    holder.addAccount(account);
 
-    admin->setAccountHolderProfile(holder);
+    admin.setAccountHolderProfile(&holder);
 
-    EXPECT_CALL(mockUserManager, getUserById(88888)).WillOnce(Return(admin));
+    EXPECT_CALL(mockUserManager, getUserById(88888)).WillOnce(Return(&admin));
 
-    EXPECT_CALL(mockUserManager, getCredentialByUserId(88888)).WillOnce(Return(Credential{"sumit", "sumit@7890", admin}));
+    EXPECT_CALL(mockUserManager, getCredentialByUserId(88888)).WillOnce(Return(Credential{"sumit", "sumit@7890", &admin}));
 
     EXPECT_CALL(mockUserManager, removeUser(88888)).WillOnce(Return(true));
 
     EXPECT_CALL(mockUserManager, addUser(_, "sumit", "sumit@7890")).WillOnce(Return(true));
 
-    EXPECT_TRUE(bank->removeUser(88888, 10000));
-}
-
-TEST_F(BankTest, RemoveAdminFails)
-{
-    Admin *admin = new Admin(UserInfo{88888, "Sumit Kumar", Role::ADMIN});
-    users.push_back(admin);
-
-    EXPECT_CALL(mockUserManager, getUserById(88888)).WillOnce(Return(admin));
-
-    EXPECT_FALSE(bank->removeUser(88888, 88888));
+    EXPECT_TRUE(bank.removeUser(88888, 10000));
 
     users.pop_back();
-    delete admin;
 }
 
-TEST_F(BankTest, GetUserById)
+TEST_F(BankTest, WhenRemoveUserWithSameIdAsAdmin_ThenReturnFalse)
 {
-    Admin *admin = new Admin(UserInfo{77777, "Vansh Gupta", Role::ADMIN});
-    users.push_back(admin);
+    Admin admin{UserInfo{88888, "Sumit Kumar", Role::ADMIN}};
+    users.push_back(&admin);
 
-    EXPECT_CALL(mockUserManager, getUserById(77777)).WillOnce(Return(admin));
+    EXPECT_CALL(mockUserManager, getUserById(88888)).WillOnce(Return(&admin));
 
-    IUser *result = bank->getUser(77777);
-    EXPECT_EQ(result, admin);
+    EXPECT_FALSE(bank.removeUser(88888, 88888));
 
     users.pop_back();
-    delete admin;
 }
 
-TEST_F(BankTest, GetUserIdByAccountHolder)
+TEST_F(BankTest, WhenGetUserByValidUserId_ThenReturnUser)
+{
+    Admin admin{UserInfo{77777, "Vansh Gupta", Role::ADMIN}};
+    users.push_back(&admin);
+
+    EXPECT_CALL(mockUserManager, getUserById(77777)).WillOnce(Return(&admin));
+
+    IUser *result = bank.getUser(77777);
+    EXPECT_EQ(result, &admin);
+
+    users.pop_back();
+}
+
+TEST_F(BankTest, WhenGetUserIdByValidAccount_ThenReturnUserId)
 {
     std::string name = "Ansh Bhargava";
     std::string username = "ansh";
@@ -244,39 +245,37 @@ TEST_F(BankTest, GetUserIdByAccountHolder)
     std::string phone = "9876543210";
 
     EXPECT_CALL(mockUserManager, getUserByUsername(username)).WillOnce(Return(nullptr));
-
     EXPECT_CALL(mockUserManager, addUser(_, username, password)).WillOnce(Return(true));
 
-    AccountHolder *holder = bank->registerAccountHolder(name, email, phone, username, password, -1);
+    AccountHolder *holder = bank.registerAccountHolder(name, email, phone, username, password, -1);
     ASSERT_NE(holder, nullptr);
 
-    Account *account = bank->createAccount(holder, AccountType::CURRENT_ACCOUNT);
+    Account *account = bank.createAccount(holder, AccountType::CURRENT_ACCOUNT);
     account->setAccountNumber(987654321);
 
     users.push_back(holder);
     EXPECT_CALL(mockUserManager, getAllUsers()).WillRepeatedly(ReturnRef(users));
 
-    int userId = bank->getUserIdByAccount(account);
+    int userId = bank.getUserIdByAccount(account);
     EXPECT_EQ(userId, holder->getUserId());
 
-    delete holder;
-    delete account;
+    users.pop_back();
 }
 
-TEST_F(BankTest, RemoveAccount)
+TEST_F(BankTest, WhenRemoveAccountWithValidUserIdAndAccountNumber_ThenReturnTrue)
 {
-    AccountHolder *holder = new AccountHolder(AccountHolderInfo{10004, "Yash Singh", Role::ACCOUNT_HOLDER, "yash@gmail.com", "9876543210"});
-    Account *account = bank->createAccount(holder, AccountType::SAVING_ACCOUNT);
+    AccountHolder holder{AccountHolderInfo{10004, "Yash Singh", Role::ACCOUNT_HOLDER, "yash@gmail.com", "9876543210"}};
+    Account *account = bank.createAccount(&holder, AccountType::SAVING_ACCOUNT);
     account->setAccountNumber(123789456);
-    holder->addAccount(account);
+    holder.addAccount(account);
 
-    users.push_back(holder);
+    users.push_back(&holder);
 
-    EXPECT_CALL(mockUserManager, getUserById(10004)).WillOnce(Return(holder));
+    EXPECT_CALL(mockUserManager, getUserById(10004)).WillOnce(Return(&holder));
+    
     EXPECT_CALL(mockUserManager, getAllUsers()).WillRepeatedly(ReturnRef(users));
 
-    EXPECT_TRUE(bank->removeAccount(10004, 123789456));
+    EXPECT_TRUE(bank.removeAccount(10004, 123789456));
 
     users.pop_back();
-    delete holder;
 }

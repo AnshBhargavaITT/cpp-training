@@ -7,3 +7,5 @@ std::string Transaction::getTransactionDetail() const
 {
     return "Date: " + date + ", Amount: " + std::to_string(amount);
 }
+
+double Transaction::getAmount() const { return amount; }

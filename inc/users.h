@@ -17,8 +17,10 @@ public:
         : userId(info.id),
           name(info.name),
           role(info.role) {}
+    
+    IUser(){};
 
-    virtual ~IUser() {}
+    virtual ~IUser() = default;
 
     virtual int getUserId() const = 0;
 

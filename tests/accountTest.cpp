@@ -1,95 +1,115 @@
 #include <gtest/gtest.h>
+#include <string>
 #include "currentAccount.h"
 #include "savingAccount.h"
 
-TEST(CurrentAccountTest, WithdrawAmount)
+class AccountTest : public ::testing::Test
 {
-    CurrentAccount account;
-    account.deposit(1000.0);
-    bool result = account.withdraw(500.0);
-    EXPECT_TRUE(result);
-    EXPECT_EQ(account.getBalance(), 500.0);
+protected:
+    CurrentAccount currentAccount;
+    SavingsAccount savingsAccount;
+
+    void SetUp() override
+    {
+        currentAccount = CurrentAccount();
+        savingsAccount = SavingsAccount();
+    }
+};
+
+TEST_F(AccountTest, WhenDepositValidAmountToCurrentAccount_ThenBalanceIncreases)
+{
+    EXPECT_TRUE(currentAccount.deposit(500.0));
+
+    EXPECT_DOUBLE_EQ(currentAccount.getBalance(), 500.0);
 }
 
-TEST(CurrentAccountTest, WithdrawAmountZeroFails)
+TEST_F(AccountTest, WhenDepositZeroAmountToCurrentAccount_ThenDepositFails)
 {
-    CurrentAccount account;
-    account.deposit(500.0);
-    EXPECT_FALSE(account.withdraw(0.0));
-    EXPECT_EQ(account.getBalance(), 500.0);
+    EXPECT_FALSE(currentAccount.deposit(0.0));
+
+    EXPECT_DOUBLE_EQ(currentAccount.getBalance(), 0.0);
 }
 
-TEST(CurrentAccountTest, WithdrawAmountNegativeFails)
+TEST_F(AccountTest, WhenDepositNegativeAmountToCurrentAccount_ThenDepositFails)
 {
-    CurrentAccount account;
-    account.deposit(500.0);
-    EXPECT_FALSE(account.withdraw(-100.0));
-    EXPECT_EQ(account.getBalance(), 500.0);
+    EXPECT_FALSE(currentAccount.deposit(-100.0));
+
+    EXPECT_DOUBLE_EQ(currentAccount.getBalance(), 0.0);
 }
 
-TEST(SavingsAccountTest, WithdrawFailsIfInsufficientBalance)
+TEST_F(AccountTest, WhenWithdrawValidAmountFromCurrentAccount_ThenBalanceDecreases)
 {
-    SavingsAccount account;
-    account.deposit(100.0);
-    bool result = account.withdraw(200.0);
-    EXPECT_FALSE(result);
-    EXPECT_EQ(account.getBalance(), 100.0);
+    currentAccount.deposit(1000.0);
+
+    EXPECT_TRUE(currentAccount.withdraw(500.0));
+
+    EXPECT_DOUBLE_EQ(currentAccount.getBalance(), 500.0);
 }
 
-TEST(SavingAccountTest, WithdrawAmount)
+TEST_F(AccountTest, WhenWithdrawZeroAmountFromCurrentAccount_ThenWithdrawFails)
 {
-    SavingsAccount account;
-    account.deposit(1000.0);
-    bool result = account.withdraw(1000.0);
-    EXPECT_TRUE(result);
-    EXPECT_EQ(account.getBalance(), 0.0);
+    currentAccount.deposit(500.0);
+
+    EXPECT_FALSE(currentAccount.withdraw(0.0));
+
+    EXPECT_DOUBLE_EQ(currentAccount.getBalance(), 500.0);
 }
 
-TEST(AccountTest, DepositAmount)
+TEST_F(AccountTest, WhenWithdrawNegativeAmountFromCurrentAccount_ThenWithdrawFails)
 {
-    CurrentAccount account;
-    bool result = account.deposit(500.0);
-    EXPECT_TRUE(result);
-    EXPECT_EQ(account.getBalance(), 500.0);
+    currentAccount.deposit(500.0);
+
+    EXPECT_FALSE(currentAccount.withdraw(-100.0));
+
+    EXPECT_DOUBLE_EQ(currentAccount.getBalance(), 500.0);
 }
 
-TEST(AccountTest, DepositAmountZeroFails)
+TEST_F(AccountTest, WhenWithdrawMoreThanBalanceFromSavingsAccount_ThenWithdrawFails)
 {
-    CurrentAccount account;
-    bool result = account.deposit(0.0);
-    EXPECT_FALSE(result);
-    EXPECT_EQ(account.getBalance(), 0.0);
+    savingsAccount.deposit(100.0);
+
+    EXPECT_FALSE(savingsAccount.withdraw(200.0));
+
+    EXPECT_DOUBLE_EQ(savingsAccount.getBalance(), 100.0);
 }
 
-TEST(AccountTest, DepositAmountNegativeFails)
+TEST_F(AccountTest, WhenWithdrawValidAmountFromSavingsAccount_ThenBalanceDecreases)
 {
-    CurrentAccount account;
-    bool result = account.deposit(-100.0);
-    EXPECT_FALSE(result);
-    EXPECT_EQ(account.getBalance(), 0.0);
+    savingsAccount.deposit(1000.0);
+
+    EXPECT_TRUE(savingsAccount.withdraw(1000.0));
+
+    EXPECT_DOUBLE_EQ(savingsAccount.getBalance(), 0.0);
 }
 
-TEST(AccountTest, MultipleDepositsAndWithdrawAmount)
+TEST_F(AccountTest, WhenMultipleDepositsAndWithdrawalsOnCurrentAccount_ThenBalanceUpdated)
 {
-    CurrentAccount account;
-    account.deposit(200.0);
-    account.deposit(300.0);
-    account.withdraw(100.0);
-    EXPECT_EQ(account.getBalance(), 400.0);
+    currentAccount.deposit(200.0);
+
+    currentAccount.deposit(300.0);
+
+    currentAccount.withdraw(100.0);
+
+    EXPECT_DOUBLE_EQ(currentAccount.getBalance(), 400.0);
 }
 
-TEST(AccountTest, SetAndGetAccountNumber)
+TEST_F(AccountTest, WhenSetAccountNumberOnSavingsAccount_ThenGetAccountNumberReturnsValue)
 {
-    SavingsAccount account;
-    account.setAccountNumber(123456789);
-    EXPECT_EQ(account.getAccountNumber(), 123456789);
+    savingsAccount.setAccountNumber(123456789);
+
+    EXPECT_EQ(savingsAccount.getAccountNumber(), 123456789);
 }
 
-TEST(AccountTest, BankStatement)
+TEST_F(AccountTest, WhenRequestBankStatementFromSavingsAccount_ThenReturnAllTransactions)
 {
-    SavingsAccount account;
-    account.deposit(100.0);
-    account.withdraw(50.0);
-    std::vector<Transaction *> transactions = account.bankStatement();
+    savingsAccount.deposit(100.0);
+    savingsAccount.withdraw(50.0);
+
+    std::vector<Transaction *> transactions = savingsAccount.bankStatement();
+
     ASSERT_EQ(transactions.size(), 2);
+
+    EXPECT_DOUBLE_EQ(transactions[0]->getAmount(), 100.0);
+
+    EXPECT_DOUBLE_EQ(transactions[1]->getAmount(), -50.0);
 }

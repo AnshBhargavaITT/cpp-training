@@ -12,101 +12,89 @@ class AuthenticationTest : public ::testing::Test
 {
 protected:
     MockUserManager mockUserManager;
-    Authentication *auth;
 
-    void SetUp() override
-    {
-        auth = new Authentication(&mockUserManager);
-    }
+    Authentication auth;
 
-    void TearDown() override
-    {
-        delete auth;
-    }
+    AuthenticationTest() : auth(&mockUserManager) {}
 };
 
-TEST_F(AuthenticationTest, LoginSuccess)
+TEST_F(AuthenticationTest, WhenLoginSucceeds_ThenReturnUser)
 {
-    MockUser *mockUser = new MockUser({11500, "Sumit", Role::ACCOUNT_HOLDER});
+    MockUser mockUser;
 
-    EXPECT_CALL(*mockUser, getUserId()).WillRepeatedly(Return(11500));
+    EXPECT_CALL(mockUser, getUserId()).WillRepeatedly(Return(11500));
 
-    EXPECT_CALL(*mockUser, getName()).WillRepeatedly(Return("Sumit"));
+    EXPECT_CALL(mockUser, getName()).WillRepeatedly(Return("Sumit"));
 
-    EXPECT_CALL(*mockUser, getRole()).WillRepeatedly(Return(Role::ACCOUNT_HOLDER));
+    EXPECT_CALL(mockUser, getRole()).WillRepeatedly(Return(Role::ACCOUNT_HOLDER));
 
     EXPECT_CALL(mockUserManager, verifyCredentials("admin", "admin@123")).WillOnce(Return(true));
 
-    EXPECT_CALL(mockUserManager, getUserByUsername("admin")).WillOnce(Return(mockUser));
+    EXPECT_CALL(mockUserManager, getUserByUsername("admin")).WillOnce(Return(&mockUser));
 
-    IUser *user = auth->login("admin", "admin@123");
-    EXPECT_EQ(user, mockUser);
+    IUser *user = auth.login("admin", "admin@123");
 
-    delete mockUser;
+    EXPECT_EQ(user, &mockUser);
 }
 
-TEST_F(AuthenticationTest, LoginFailWrongPassword)
+TEST_F(AuthenticationTest, WhenLoginFailsDueToWrongPassword_ThenReturnNull)
 {
     EXPECT_CALL(mockUserManager, verifyCredentials("ansh@123", "5674321")).WillOnce(Return(false));
 
     EXPECT_CALL(mockUserManager, getUserByUsername("ansh@123")).Times(0);
 
-    IUser *user = auth->login("ansh@123", "5674321");
+    IUser *user = auth.login("ansh@123", "5674321");
 
     EXPECT_EQ(user, nullptr);
 }
 
-TEST_F(AuthenticationTest, LogoutWhenLoggedIn)
+TEST_F(AuthenticationTest, WhenLogoutAfterLogin_ThenReturnTrue)
 {
-    MockUser *mockUser = new MockUser({11500, "Sumit", Role::ACCOUNT_HOLDER});
+    MockUser mockUser;
 
-    EXPECT_CALL(*mockUser, getUserId()).WillRepeatedly(Return(11500));
+    EXPECT_CALL(mockUser, getUserId()).WillRepeatedly(Return(11500));
 
-    EXPECT_CALL(*mockUser, getName()).WillRepeatedly(Return("Sumit"));
+    EXPECT_CALL(mockUser, getName()).WillRepeatedly(Return("Sumit"));
 
-    EXPECT_CALL(*mockUser, getRole()).WillRepeatedly(Return(Role::ACCOUNT_HOLDER));
+    EXPECT_CALL(mockUser, getRole()).WillRepeatedly(Return(Role::ACCOUNT_HOLDER));
 
     EXPECT_CALL(mockUserManager, verifyCredentials(_, _)).WillOnce(Return(true));
 
-    EXPECT_CALL(mockUserManager, getUserByUsername(_)).WillOnce(Return(mockUser));
+    EXPECT_CALL(mockUserManager, getUserByUsername(_)).WillOnce(Return(&mockUser));
 
-    auth->login("sumit@123", "5674321");
+    auth.login("sumit@123", "5674321");
 
-    EXPECT_TRUE(auth->logout());
-
-    delete mockUser;
+    EXPECT_TRUE(auth.logout());
 }
 
-TEST_F(AuthenticationTest, LogoutWhenNoUser)
+TEST_F(AuthenticationTest, WhenLogoutWithoutLogin_ThenReturnFalse)
 {
-    EXPECT_FALSE(auth->logout());
+    EXPECT_FALSE(auth.logout());
 }
 
-TEST_F(AuthenticationTest, GetCurrentUser)
+TEST_F(AuthenticationTest, WhenGetCurrentUserAfterLogin_ThenReturnUser)
 {
-    MockUser *mockUser = new MockUser({11500, "Sumit", Role::ACCOUNT_HOLDER});
+    MockUser mockUser;
 
-    EXPECT_CALL(*mockUser, getUserId()).WillRepeatedly(Return(11500));
+    EXPECT_CALL(mockUser, getUserId()).WillRepeatedly(Return(11500));
 
-    EXPECT_CALL(*mockUser, getName()).WillRepeatedly(Return("Sumit"));
+    EXPECT_CALL(mockUser, getName()).WillRepeatedly(Return("Sumit"));
 
-    EXPECT_CALL(*mockUser, getRole()).WillRepeatedly(Return(Role::ACCOUNT_HOLDER));
+    EXPECT_CALL(mockUser, getRole()).WillRepeatedly(Return(Role::ACCOUNT_HOLDER));
 
     EXPECT_CALL(mockUserManager, verifyCredentials("sumit", "sumit@1234")).WillOnce(Return(true));
 
-    EXPECT_CALL(mockUserManager, getUserByUsername("sumit")).WillOnce(Return(mockUser));
+    EXPECT_CALL(mockUserManager, getUserByUsername("sumit")).WillOnce(Return(&mockUser));
 
-    auth->login("sumit", "sumit@1234");
+    auth.login("sumit", "sumit@1234");
 
-    IUser *user = auth->getCurrentUser();
+    IUser *user = auth.getCurrentUser();
 
-    ASSERT_EQ(user, mockUser);
+    ASSERT_EQ(user, &mockUser);
 
     EXPECT_EQ(user->getUserId(), 11500);
 
     EXPECT_EQ(user->getName(), "Sumit");
 
     EXPECT_EQ(user->getRole(), Role::ACCOUNT_HOLDER);
-
-    delete mockUser;
 }

@@ -11,23 +11,36 @@ class UserManagerTest : public ::testing::Test
 protected:
     UserManager userManager;
 
-    MockUser user11003{UserInfo{11003, "Ansh", Role::ACCOUNT_HOLDER}};
-
-    MockUser user11987{UserInfo{11987, "Yash", Role::ACCOUNT_HOLDER}};
-
-    MockUser user19876{UserInfo{19876, "Rishabh", Role::ACCOUNT_HOLDER}};
-
-    MockUser user12345{UserInfo{12345, "Sumit", Role::ADMIN}};
+    MockUser user11003;
+    MockUser user11987;
+    MockUser user19876;
+    MockUser user12345;
 
     void SetUp() override
     {
         ON_CALL(user11003, getUserId()).WillByDefault(Return(11003));
 
+        ON_CALL(user11003, getName()).WillByDefault(Return("Ansh"));
+
+        ON_CALL(user11003, getRole()).WillByDefault(Return(Role::ACCOUNT_HOLDER));
+
         ON_CALL(user11987, getUserId()).WillByDefault(Return(11987));
+
+        ON_CALL(user11987, getName()).WillByDefault(Return("Yash"));
+
+        ON_CALL(user11987, getRole()).WillByDefault(Return(Role::ACCOUNT_HOLDER));
 
         ON_CALL(user19876, getUserId()).WillByDefault(Return(19876));
 
+        ON_CALL(user19876, getName()).WillByDefault(Return("Rishabh"));
+
+        ON_CALL(user19876, getRole()).WillByDefault(Return(Role::ACCOUNT_HOLDER));
+
         ON_CALL(user12345, getUserId()).WillByDefault(Return(12345));
+
+        ON_CALL(user12345, getName()).WillByDefault(Return("Sumit"));
+
+        ON_CALL(user12345, getRole()).WillByDefault(Return(Role::ADMIN));
 
         userManager.addUser(&user11003, "ansh@6603", "ansh@123");
 
@@ -48,49 +61,48 @@ protected:
     }
 };
 
-TEST_F(UserManagerTest, AddNewUser)
+TEST_F(UserManagerTest, WhenAddNewUser_ThenReturnTrue)
 {
     EXPECT_TRUE(userManager.addUser(&user19876, "rishabh@8181", "rish@1234"));
 }
 
-TEST_F(UserManagerTest, AddNewUserFailsIfUserAlreadyExists)
+TEST_F(UserManagerTest, WhenAddExistingUser_ThenReturnFalse)
 {
     EXPECT_FALSE(userManager.addUser(&user11003, "Shyam", "shyam@3456"));
 }
 
-TEST_F(UserManagerTest, RemoveExistingUser)
+TEST_F(UserManagerTest, WhenRemoveExistingUser_ThenReturnTrueAndUserIsRemoved)
 {
     EXPECT_TRUE(userManager.removeUser(user11003.getUserId()));
-
     EXPECT_EQ(userManager.getUserById(user11003.getUserId()), nullptr);
 }
 
-TEST_F(UserManagerTest, RemoveNonexistentUser)
+TEST_F(UserManagerTest, WhenRemoveNonexistentUser_ThenReturnFalse)
 {
     EXPECT_FALSE(userManager.removeUser(9999));
 }
 
-TEST_F(UserManagerTest, GetUserById)
+TEST_F(UserManagerTest, WhenGetUserByIdExists_ThenReturnUser)
 {
     EXPECT_EQ(userManager.getUserById(user11987.getUserId()), &user11987);
 }
 
-TEST_F(UserManagerTest, GetUserByIdReturnsNull)
+TEST_F(UserManagerTest, WhenGetUserByIdNotExists_ThenReturnNullptr)
 {
     EXPECT_EQ(userManager.getUserById(99999), nullptr);
 }
 
-TEST_F(UserManagerTest, GetUserByUsername)
+TEST_F(UserManagerTest, WhenGetUserByUsernameExists_ThenReturnUser)
 {
     EXPECT_EQ(userManager.getUserByUsername("yash@309"), &user11987);
 }
 
-TEST_F(UserManagerTest, GetUserByUsernameReturnsNull)
+TEST_F(UserManagerTest, WhenGetUserByUsernameNotExists_ThenReturnNull)
 {
     EXPECT_EQ(userManager.getUserByUsername("dheeraj"), nullptr);
 }
 
-TEST_F(UserManagerTest, VerifyCredentials)
+TEST_F(UserManagerTest, WhenVerifyCorrectCredentials_ThenReturnTrue)
 {
     EXPECT_TRUE(userManager.verifyCredentials("ansh@6603", "ansh@123"));
 
@@ -99,17 +111,17 @@ TEST_F(UserManagerTest, VerifyCredentials)
     EXPECT_TRUE(userManager.verifyCredentials("sumit@612", "sumit@9876"));
 }
 
-TEST_F(UserManagerTest, VerifyIncorrectCredentials)
+TEST_F(UserManagerTest, WhenVerifyIncorrectCredentials_ThenReturnFalse)
 {
     EXPECT_FALSE(userManager.verifyCredentials("ansh@6603", "ansh@09876"));
 }
 
-TEST_F(UserManagerTest, VerifyCredentialsFailsForUnknownUser)
+TEST_F(UserManagerTest, WhenVerifyCredentialsForUnknownUser_ThenReturnFalse)
 {
     EXPECT_FALSE(userManager.verifyCredentials("dheeraj", "dhee@123"));
 }
 
-TEST_F(UserManagerTest, GetCredentialByUserId)
+TEST_F(UserManagerTest, WhenGetCredentialByUserIdExists_ThenReturnCredential)
 {
     Credential credential = userManager.getCredentialByUserId(user12345.getUserId());
 
@@ -118,11 +130,11 @@ TEST_F(UserManagerTest, GetCredentialByUserId)
     EXPECT_EQ(credential.user, &user12345);
 }
 
-TEST_F(UserManagerTest, GetCredentialReturnsNULLIfUserNotFound)
+TEST_F(UserManagerTest, WhenGetCredentialByUserIdNotExists_ThenReturnEmptyCredential)
 {
     Credential credential = userManager.getCredentialByUserId(40412);
 
     EXPECT_EQ(credential.username, "");
-
+    
     EXPECT_EQ(credential.user, nullptr);
 }
