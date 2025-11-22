@@ -1,0 +1,147 @@
+Start testing: Aug 20 14:09 IST
+----------------------------------------------------------
+1/1 Testing: RunEvenOddTest
+1/1 Test: RunEvenOddTest
+Command: "/home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/parameterized_test/build/MyTests"
+Directory: /home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/parameterized_test/build
+"RunEvenOddTest" start time: Aug 20 14:09 IST
+Output:
+----------------------------------------------------------
+[==========] Running 16 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 10 tests from EvenNumbers/MyTestSuite
+[ RUN      ] EvenNumbers/MyTestSuite.IsEven/0
+Preparing test with parameter: 2
+Cleaning up after test with parameter: 2
+[       OK ] EvenNumbers/MyTestSuite.IsEven/0 (0 ms)
+[ RUN      ] EvenNumbers/MyTestSuite.IsEven/1
+Preparing test with parameter: 4
+Cleaning up after test with parameter: 4
+[       OK ] EvenNumbers/MyTestSuite.IsEven/1 (0 ms)
+[ RUN      ] EvenNumbers/MyTestSuite.IsEven/2
+Preparing test with parameter: 6
+Cleaning up after test with parameter: 6
+[       OK ] EvenNumbers/MyTestSuite.IsEven/2 (0 ms)
+[ RUN      ] EvenNumbers/MyTestSuite.IsEven/3
+Preparing test with parameter: 8
+Cleaning up after test with parameter: 8
+[       OK ] EvenNumbers/MyTestSuite.IsEven/3 (0 ms)
+[ RUN      ] EvenNumbers/MyTestSuite.IsEven/4
+Preparing test with parameter: 10
+Cleaning up after test with parameter: 10
+[       OK ] EvenNumbers/MyTestSuite.IsEven/4 (0 ms)
+[ RUN      ] EvenNumbers/MyTestSuite.IsOdd/0
+Preparing test with parameter: 2
+/home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/parameterized_test/evenOdd.cpp:36: Failure
+Value of: param_value % 2 != 0
+  Actual: false
+Expected: true
+Param_2 should be odd
+Cleaning up after test with parameter: 2
+[  FAILED  ] EvenNumbers/MyTestSuite.IsOdd/0, where GetParam() = 2 (0 ms)
+[ RUN      ] EvenNumbers/MyTestSuite.IsOdd/1
+Preparing test with parameter: 4
+/home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/parameterized_test/evenOdd.cpp:36: Failure
+Value of: param_value % 2 != 0
+  Actual: false
+Expected: true
+Param_4 should be odd
+Cleaning up after test with parameter: 4
+[  FAILED  ] EvenNumbers/MyTestSuite.IsOdd/1, where GetParam() = 4 (0 ms)
+[ RUN      ] EvenNumbers/MyTestSuite.IsOdd/2
+Preparing test with parameter: 6
+/home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/parameterized_test/evenOdd.cpp:36: Failure
+Value of: param_value % 2 != 0
+  Actual: false
+Expected: true
+Param_6 should be odd
+Cleaning up after test with parameter: 6
+[  FAILED  ] EvenNumbers/MyTestSuite.IsOdd/2, where GetParam() = 6 (0 ms)
+[ RUN      ] EvenNumbers/MyTestSuite.IsOdd/3
+Preparing test with parameter: 8
+/home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/parameterized_test/evenOdd.cpp:36: Failure
+Value of: param_value % 2 != 0
+  Actual: false
+Expected: true
+Param_8 should be odd
+Cleaning up after test with parameter: 8
+[  FAILED  ] EvenNumbers/MyTestSuite.IsOdd/3, where GetParam() = 8 (0 ms)
+[ RUN      ] EvenNumbers/MyTestSuite.IsOdd/4
+Preparing test with parameter: 10
+/home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/parameterized_test/evenOdd.cpp:36: Failure
+Value of: param_value % 2 != 0
+  Actual: false
+Expected: true
+Param_10 should be odd
+Cleaning up after test with parameter: 10
+[  FAILED  ] EvenNumbers/MyTestSuite.IsOdd/4, where GetParam() = 10 (0 ms)
+[----------] 10 tests from EvenNumbers/MyTestSuite (0 ms total)
+
+[----------] 6 tests from OddNumbers/MyTestSuite
+[ RUN      ] OddNumbers/MyTestSuite.IsEven/0
+Preparing test with parameter: 1
+/home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/parameterized_test/evenOdd.cpp:30: Failure
+Expected equality of these values:
+  param_value % 2
+    Which is: 1
+  0
+Param_1 should be even
+Cleaning up after test with parameter: 1
+[  FAILED  ] OddNumbers/MyTestSuite.IsEven/0, where GetParam() = 1 (0 ms)
+[ RUN      ] OddNumbers/MyTestSuite.IsEven/1
+Preparing test with parameter: 3
+/home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/parameterized_test/evenOdd.cpp:30: Failure
+Expected equality of these values:
+  param_value % 2
+    Which is: 1
+  0
+Param_3 should be even
+Cleaning up after test with parameter: 3
+[  FAILED  ] OddNumbers/MyTestSuite.IsEven/1, where GetParam() = 3 (0 ms)
+[ RUN      ] OddNumbers/MyTestSuite.IsEven/2
+Preparing test with parameter: 5
+/home/anshbhargava/Desktop/cpp-training/week7/20-08-2025/parameterized_test/evenOdd.cpp:30: Failure
+Expected equality of these values:
+  param_value % 2
+    Which is: 1
+  0
+Param_5 should be even
+Cleaning up after test with parameter: 5
+[  FAILED  ] OddNumbers/MyTestSuite.IsEven/2, where GetParam() = 5 (0 ms)
+[ RUN      ] OddNumbers/MyTestSuite.IsOdd/0
+Preparing test with parameter: 1
+Cleaning up after test with parameter: 1
+[       OK ] OddNumbers/MyTestSuite.IsOdd/0 (0 ms)
+[ RUN      ] OddNumbers/MyTestSuite.IsOdd/1
+Preparing test with parameter: 3
+Cleaning up after test with parameter: 3
+[       OK ] OddNumbers/MyTestSuite.IsOdd/1 (0 ms)
+[ RUN      ] OddNumbers/MyTestSuite.IsOdd/2
+Preparing test with parameter: 5
+Cleaning up after test with parameter: 5
+[       OK ] OddNumbers/MyTestSuite.IsOdd/2 (0 ms)
+[----------] 6 tests from OddNumbers/MyTestSuite (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 16 tests from 2 test suites ran. (0 ms total)
+[  PASSED  ] 8 tests.
+[  FAILED  ] 8 tests, listed below:
+[  FAILED  ] EvenNumbers/MyTestSuite.IsOdd/0, where GetParam() = 2
+[  FAILED  ] EvenNumbers/MyTestSuite.IsOdd/1, where GetParam() = 4
+[  FAILED  ] EvenNumbers/MyTestSuite.IsOdd/2, where GetParam() = 6
+[  FAILED  ] EvenNumbers/MyTestSuite.IsOdd/3, where GetParam() = 8
+[  FAILED  ] EvenNumbers/MyTestSuite.IsOdd/4, where GetParam() = 10
+[  FAILED  ] OddNumbers/MyTestSuite.IsEven/0, where GetParam() = 1
+[  FAILED  ] OddNumbers/MyTestSuite.IsEven/1, where GetParam() = 3
+[  FAILED  ] OddNumbers/MyTestSuite.IsEven/2, where GetParam() = 5
+
+ 8 FAILED TESTS
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Failed.
+"RunEvenOddTest" end time: Aug 20 14:09 IST
+"RunEvenOddTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Aug 20 14:09 IST

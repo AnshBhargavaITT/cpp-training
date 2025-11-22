@@ -1,0 +1,2 @@
+RunFactorialTests 1 0.00175894
+---
